@@ -1,0 +1,358 @@
+/* ==========================================================================
+   1. DESIGN SYSTEM & VARIÁVEIS MODULARIZADAS
+   ========================================================================== */
+:root {
+  /* Cores Institucionais */
+  --primary: #0056b3;
+  --primary-dark: #003775;
+  --bg-main: #f4f6f9;
+  --surface: #ffffff;
+  
+  /* Cores Semânticas de Estoque/Status */
+  --status-high-bg: #065f46;
+  --status-high-text: #ecfdf5;
+  --status-medium-bg: #92400e;
+  --status-medium-text: #fffbeb;
+  --status-low-bg: #991b1b;
+  --status-low-text: #fef2f2;
+
+  /* Tipografia & Neutros */
+  --text-main: #1f2937;
+  --text-muted: #4b5563;
+  --border-color: #e5e7eb;
+  --focus-ring: #ffbf00;
+
+  /* Espaçamentos e Raios */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+  --transition: all 0.2s ease-in-out;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.6;
+  color: var(--text-main);
+  background-color: var(--bg-main);
+}
+
+/* ==========================================================================
+   2. ACESSIBILIDADE DE FOCO (TECLADO / TAB)
+   ========================================================================== */
+a:focus-visible, 
+button:focus-visible, 
+input:focus-visible, 
+select:focus-visible, 
+summary:focus-visible {
+  outline: 3px solid var(--focus-ring) !important;
+  outline-offset: 3px !important;
+  border-radius: var(--radius-sm);
+}
+
+/* ==========================================================================
+   3. CABEÇALHO (HEADER) COM BANNER HORIZONTAL
+   ========================================================================== */
+header {
+  background-color: var(--primary-dark);
+  color: white;
+  padding: 0;
+  box-shadow: var(--shadow-md);
+}
+
+.header-banner {
+  position: relative;
+  width: 100%;
+  max-height: 280px;
+  overflow: hidden;
+}
+
+.hero-image {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  display: block;
+  opacity: 0.85;
+}
+
+.header-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(0, 55, 117, 0.4) 0%, rgba(0, 55, 117, 0.92) 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 1rem;
+}
+
+.header-overlay h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+}
+
+.header-overlay p {
+  font-size: 1.1rem;
+  opacity: 0.95;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+}
+
+/* Menu de Navegação */
+nav {
+  background-color: var(--primary);
+  padding: 0.75rem 1rem;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+}
+
+nav a:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   4. ESTRUTURA E SEÇÕES PRINCIPAIS
+   ========================================================================== */
+main {
+  max-width: 1000px;
+  margin: 2.5rem auto;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+section {
+  background-color: var(--surface);
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+}
+
+h2 {
+  color: var(--primary);
+  font-size: 1.35rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 0.5rem;
+}
+
+/* ==========================================================================
+   5. FORMULÁRIOS, BOTÕES E MICRO-INTERAÇÕES
+   ========================================================================== */
+fieldset {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  margin: 1.25rem 0;
+  background-color: #fafafa;
+}
+
+legend {
+  font-weight: 700;
+  color: var(--primary);
+  padding: 0 0.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+label {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+input[type="text"], 
+input[type="search"], 
+input[type="datetime-local"], 
+select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  transition: var(--transition);
+}
+
+input:focus, select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.15);
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+button, input[type="submit"] {
+  background-color: var(--primary);
+  color: white;
+  font-weight: 600;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+button:hover, input[type="submit"]:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+button[type="reset"] {
+  background-color: #6b7280;
+}
+
+button[type="reset"]:hover {
+  background-color: #4b5563;
+}
+
+/* ==========================================================================
+   6. CARDS UBS & STATUS SEMÂNTICO DO ESTOQUE
+   ========================================================================== */
+.ubs-card {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin-top: 1.5rem;
+  transition: var(--transition);
+}
+
+.ubs-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.ubs-header {
+  background-color: var(--primary);
+  color: white;
+  padding: 1rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* Badges Coloridas com Alto Contraste */
+.status-badge {
+  padding: 0.35rem 0.85rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: inline-block;
+}
+
+.status-high {
+  background-color: var(--status-high-bg);
+  color: var(--status-high-text);
+}
+
+.status-medium {
+  background-color: var(--status-medium-bg);
+  color: var(--status-medium-text);
+}
+
+.status-low {
+  background-color: var(--status-low-bg);
+  color: var(--status-low-text);
+}
+
+.ubs-body {
+  padding: 1.25rem;
+  background-color: var(--surface);
+}
+
+.stock-box {
+  background-color: #f9fafb;
+  border: 1px solid var(--border-color);
+  padding: 1rem;
+  border-radius: var(--radius-sm);
+  margin: 1rem 0;
+}
+
+meter {
+  width: 100%;
+  height: 18px;
+  margin: 0.5rem 0;
+}
+
+.text-success { color: #065f46; font-weight: 600; }
+.text-danger { color: #991b1b; font-weight: 600; }
+
+details {
+  background-color: #f9fafb;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+  margin-top: 1rem;
+}
+
+summary {
+  font-weight: 600;
+  color: var(--primary);
+  cursor: pointer;
+}
+
+.footer-meta {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  padding: 0.75rem;
+  background-color: #f3f4f6;
+  border-top: 1px solid var(--border-color);
+}
+
+footer {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+footer a {
+  color: var(--primary);
+  text-decoration: underline;
+}
