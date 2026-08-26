@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Plataforma comunitária e acessível para verificação de disponibilidade de medicamentos essenciais nas unidades do SUS.">
+  <title>FarmaSUS - Mapeamento Colaborativo de Medicamentos no SUS</title>
+</head>
+<body>
+
+  <!-- ITEM 1: HEADER PRINCIPAL -->
+  <header>
+    <h1>FarmaSUS: Mapeamento Colaborativo de Medicamentos no SUS</h1>
+    <p>Consulte a disponibilidade de medicamentos de uso contínuo nas Unidades Básicas de Saúde (UBS) e evite viagens perdidas.</p>
+
+    <!-- DESAFIO EXTRA: Botão de ícone sem texto visível com aria-label para acessibilidade -->
+    <aside aria-label="Aviso do sistema">
+      <p>⚠️ <strong>Aviso:</strong> Sistema operando com dados atualizados pela comunidade local.</p>
+      <button type="button" aria-label="Fechar aviso de atualização">&times;</button>
+    </aside>
+    
+    <!-- MENU DE NAVEGAÇÃO (ITEM 7: APENAS <a> E <button>) -->
+    <nav aria-label="Navegação Principal">
+      <ul>
+        <li><a href="#busca">Consultar Medicamento</a></li>
+        <li><a href="#status-locais">Status por Unidade</a></li>
+        <li><a href="#reportar">Reportar Disponibilidade</a></li>
+        <li><a href="#estatisticas">Relatório de Transparência</a></li>
+        <li><a href="#faq">Perguntas Frequentes (FAQ)</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ITEM 1: APENAS UM MAIN -->
+  <main>
+
+    <!-- ITEM 2: SECTION 1 COM H2 -->
+    <section id="busca" aria-labelledby="titulo-busca">
+      <h2 id="titulo-busca">Buscar Disponibilidade de Medicamento</h2>
+      <p>Informe o nome do medicamento ou o princípio ativo e selecione seu bairro para localizar o posto mais próximo.</p>
+
+      <form action="#" method="get">
+        <!-- ITEM 5: FIELDSET E LEGEND -->
+        <fieldset>
+          <legend>Parâmetros de Pesquisa</legend>
+
+          <!-- ITEM 6: LABELS E INPUTS COM FOR/ID IDENTICOS -->
+          <p>
+            <label for="campo-medicamento">Nome do Medicamento ou Princípio Ativo:</label><br>
+            <!-- ITEM 3 & CRITÉRIO: Sem usar type="text" genérico, usando type="search" com autocomplete -->
+            <input 
+              type="search" 
+              id="campo-medicamento" 
+              name="medicamento" 
+              placeholder="Ex: Insulina NPH, Losartana..." 
+              list="lista-medicamentos" 
+              required
+              aria-required="true"
+            >
+            <datalist id="lista-medicamentos">
+              <option value="Insulina NPH Human 100UI/ml"></option>
+              <option value="Losartana Potássica 50mg"></option>
+              <option value="Metformina Cloridrato 850mg"></option>
+              <option value="Atenolol 50mg"></option>
+              <option value="Dipirona Sódica 500mg/ml"></option>
+              <option value="Omeprazol 20mg"></option>
+              <option value="Salbutamol 100mcg Spray"></option>
+            </datalist>
+          </p>
+
+          <p>
+            <label for="campo-bairro">Selecione seu Bairro / Região:</label><br>
+            <!-- DESAFIO EXTRA: SELECT COM 4+ OPÇÕES -->
+            <select id="campo-bairro" name="bairro" required>
+              <option value="" disabled selected>-- Selecione a região --</option>
+              <option value="centro">Centro</option>
+              <option value="ipes">Ipês</option>
+              <option value="mangabeira">Mangabeira</option>
+              <option value="bancarios">Bancários</option>
+              <option value="geisel">Geisel</option>
+              <option value="tambau">Tambaú</option>
+            </select>
+          </p>
+
+          <p>
+            <input type="checkbox" id="apenas-disponiveis" name="apenas_disponiveis" value="1">
+            <label for="apenas-disponiveis">Exibir apenas postos com estoque confirmado nas últimas 24h</label>
+          </p>
+
+          <p>
+            <!-- ITEM 7: BOTÕES SEMÂNTICOS -->
+            <button type="submit">Buscar Unidades</button>
+            <button type="reset">Limpar Filtros</button>
+          </p>
+        </fieldset>
+      </form>
+    </section>
+
+    <!-- ITEM 2: SECTION 2 COM H2 (SEM PULAR NÍVEIS DE HEADING) -->
+    <section id="status-locais" aria-labelledby="titulo-status">
+      <h2 id="titulo-status">Resultados da Consulta</h2>
+      
+      <!-- ARTIGO DO POSTO 1 -->
+      <article id="ubs-centro">
+        <header>
+          <h3>UBS I - Centro de Saúde da Família</h3>
+          <p><mark>Status do Medicamento: Insulina NPH 100UI/ml</mark></p>
+        </header>
+
+        <address>
+          <strong>Endereço:</strong> Rua das Flores, 120 — Centro<br>
+          <strong>Telefone:</strong> <a href="tel:+558332140001">(83) 3214-0001</a><br>
+          <strong>Horário:</strong> Segunda a Sexta, das 07:00 às 16:00
+        </address>
+
+        <section aria-label="Nível de Estoque">
+          <h4>Nível de Estoque Estimado:</h4>
+          <p>
+            <label for="meter-ubs1">Capacidade em Estoque:</label>
+            <meter id="meter-ubs1" value="0.8" min="0" max="1" low="0.2" high="0.7" optimum="0.9">80% (Estoque Alto)</meter>
+            <span> (Estoque Alto)</span>
+          </p>
+        </section>
+
+        <details>
+          <summary>Ver postos alternativos em um raio de 3 km</summary>
+          <ul>
+            <li>
+              <strong>UBS Pedro Gondim:</strong> Losartana disponível / Insulina em falta 
+              (<time datetime="2026-08-26T14:30">Atualizado hoje às 14:30</time>)
+            </li>
+            <li>
+              <strong>Farmácia Popular Unidade II:</strong> Estoque completo 
+              (<time datetime="2026-08-26T10:15">Atualizado hoje às 10:15</time>)
+            </li>
+          </ul>
+        </details>
+
+        <footer>
+          <p>Última confirmação: <time datetime="2026-08-26T16:00">26/08/2026 às 16:00</time></p>
+          <p>Relatado por: <em>Maria S. (Usuária verificada)</em></p>
+        </footer>
+      </article>
+
+      <hr>
+
+      <!-- ARTIGO DO POSTO 2 -->
+      <article id="ubs-mangabeira">
+        <header>
+          <h3>UBS II - Mangabeira Saúde</h3>
+          <p><mark>Status do Medicamento: Losartana Potássica 50mg</mark></p>
+        </header>
+
+        <address>
+          <strong>Endereço:</strong> Av. Principal, 500 — Mangabeira<br>
+          <strong>Telefone:</strong> <a href="tel:+558332140002">(83) 3214-0002</a><br>
+          <strong>Horário:</strong> Segunda a Sexta, das 08:00 às 17:00
+        </address>
+
+        <section aria-label="Nível de Estoque">
+          <h4>Nível de Estoque Estimado:</h4>
+          <p>
+            <label for="meter-ubs2">Capacidade em Estoque:</label>
+            <meter id="meter-ubs2" value="0.0" min="0" max="1" low="0.2" high="0.7" optimum="0.9">0% (Esgotado)</meter>
+            <span> <strong>(Em Falta)</strong></span>
+          </p>
+        </section>
+
+        <footer>
+          <p>Última confirmação: <time datetime="2026-08-26T15:10">26/08/2026 às 15:10</time></p>
+          <p>Relatado por: <em>João P. (Cidadão colaborador)</em></p>
+        </footer>
+      </article>
+
+    </section>
+
+    <!-- SECTION 3: FORMULÁRIO PRINCIPAL DE COLABORAÇÃO DA ATIVIDADE -->
+    <section id="reportar" aria-labelledby="titulo-reportar">
+      <h2 id="titulo-reportar">Colabore: Esteve na Farmácia Hoje?</h2>
+      <p>Ajude a comunidade informando se você encontrou ou não o seu medicamento na unidade visitada.</p>
+
+      <form action="#" method="post" enctype="multipart/form-data">
+        <!-- ITEM 5: FIELDSET PRINCIPAL -->
+        <fieldset>
+          <legend>Formulário de Atualização Comunitária</legend>
+
+          <!-- ITEM 3 & DESAFIO EXTRA: SELECT COM 4+ OPÇÕES -->
+          <p>
+            <label for="rep-unidade">Unidade Básica de Saúde Visitada:</label><br>
+            <select id="rep-unidade" name="unidade_id" required>
+              <option value="" disabled selected>-- Selecione a unidade --</option>
+              <option value="1">UBS I - Centro de Saúde da Família</option>
+              <option value="2">UBS II - Mangabeira Saúde</option>
+              <option value="3">UBS III - Ipês</option>
+              <option value="4">UBS IV - Bancários</option>
+            </select>
+          </p>
+
+          <!-- ITEM 4 & CRITÉRIO: USO DE PATTERN E MINLENGTH (Evitando type="text" genérico sem validação) -->
+          <p>
+            <label for="rep-medicamento">Medicamento Procurado:</label><br>
+            <input 
+              type="search" 
+              id="rep-medicamento" 
+              name="medicamento_nome" 
+              placeholder="Ex: Insulina NPH" 
+              required 
+              minlength="3"
+              pattern="^[A-Za-z0-9À-ÿ\s]{3,}$"
+              title="Digite pelo menos 3 caracteres usando apenas letras e números."
+            >
+          </p>
+
+          <!-- ITEM 3: TIPO SEMÂNTICO DE DATA E HORA (COM ATRIBUTOS MIN/MAX DE VALIDAÇÃO) -->
+          <p>
+            <label for="rep-data-visita">Data e Hora da Visita:</label><br>
+            <input 
+              type="datetime-local" 
+              id="rep-data-visita" 
+              name="data_visita" 
+              required
+              min="2026-01-01T00:00"
+              max="2026-12-31T23:59"
+            >
+          </p>
+
+          <!-- DESAFIO EXTRA: GRUPO DE INPUT TYPE="RADIO" MUTUAMENTE EXCLUSIVO -->
+          <fieldset>
+            <legend>Situação Encontrada na Farmácia</legend>
+            <p>
+              <input type="radio" id="sit-disponivel" name="situacao" value="disponivel" required>
+              <label for="sit-disponivel">Consegui retirar a medicação (Estoque OK)</label>
+            </p>
+            <p>
+              <input type="radio" id="sit-parcial" name="situacao" value="parcial">
+              <label for="sit-parcial">Estoque Parcial (Quantidade menor que a receita)</label>
+            </p>
+            <p>
+              <input type="radio" id="sit-falta" name="situacao" value="falta">
+              <label for="sit-falta">Em falta total (Não havia estoque)</label>
+            </p>
+          </fieldset>
+
+          <p>
+            <label for="rep-comprovante">Anexar Comprovante ou Foto do Posto (Opcional):</label><br>
+            <input type="file" id="rep-comprovante" name="comprovante" accept="image/*,.pdf">
+          </p>
+
+          <p>
+            <label for="rep-observacoes">Observações Adicionais:</label><br>
+            <textarea id="rep-observacoes" name="observacoes" rows="4" cols="50" placeholder="Ex: Atendente informou que a nova remessa chega na próxima semana."></textarea>
+          </p>
+
+          <p>
+            <!-- ITEM 7: USO DE BUTTON -->
+            <button type="submit">Enviar Colaboração</button>
+          </p>
+        </fieldset>
+      </form>
+    </section>
+
+    <!-- SECTION 4: TABELA E TRANSPARÊNCIA COM HEADING H2 -->
+    <section id="estatisticas" aria-labelledby="titulo-estatisticas">
+      <h2 id="titulo-estatisticas">Relatório Geral de Transparência da Rede Municipal</h2>
+      <p>Dados consolidados da taxa de atendimento de receitas de uso contínuo nos últimos 30 dias.</p>
+
+      <table border="1">
+        <caption>Índice de Disponibilidade de Medicamentos Essenciais por Categoria - Mês Atual</caption>
+        <thead>
+          <tr>
+            <th scope="col">Classe Terapêutica</th>
+            <th scope="col">Medicamentos Monitorados</th>
+            <th scope="col">Taxa de Atendimento (%)</th>
+            <th scope="col">Status Geral</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Hipertensão e Cardiologia</th>
+            <td>Losartana, Atenolol, Enalapril</td>
+            <td>85%</td>
+            <td><mark>Estoque Estável</mark></td>
+          </tr>
+          <tr>
+            <th scope="row">Diabetes / Endocrinologia</th>
+            <td>Insulina NPH, Metformina, Glibenclamida</td>
+            <td>62%</td>
+            <td><mark>Atenção / Risco</mark></td>
+          </tr>
+          <tr>
+            <th scope="row">Saúde Mental / Psicotrópicos</th>
+            <td>Fluoxetina, Diazepam, Carbamazepina</td>
+            <td>45%</td>
+            <td><mark>Crítico</mark></td>
+          </tr>
+          <tr>
+            <th scope="row">Asma e Respiratórios</th>
+            <td>Salbutamol, Beclometasona</td>
+            <td>90%</td>
+            <td><mark>Estoque Normal</mark></td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th scope="row" colspan="2">Média Geral de Cobertura da Rede</th>
+            <td colspan="2"><strong>70.5% das solicitações atendidas</strong></td>
+          </tr>
+        </tfoot>
+      </table>
+    </section>
+
+    <!-- SECTION 5: FAQ COM HEADING H2 -->
+    <section id="faq" aria-labelledby="titulo-faq">
+      <h2 id="titulo-faq">Dúvidas Frequentes sobre a Retirada de Medicamentos</h2>
+
+      <details>
+        <summary>Quais documentos preciso levar para retirar medicamentos na UBS?</summary>
+        <p>Você deve apresentar obrigatoriamente:</p>
+        <ul>
+          <li>Documento oficial com foto (RG ou CNH);</li>
+          <li>Cartão Nacional do SUS;</li>
+          <li>Receita médica válida (emitida pelo SUS ou rede privada, dependendo do medicamento).</li>
+        </ul>
+      </details>
+
+      <details>
+        <summary>Qual a validade de uma receita médica de uso contínuo no SUS?</summary>
+        <p>Para medicamentos de uso contínuo (ex: pressão e diabetes), a receita tem validade de até <time datetime="P180D">180 dias (6 meses)</time>.</p>
+      </details>
+    </section>
+
+  </main>
+
+  <!-- ITEM 1: FOOTER PRINCIPAL -->
+  <footer>
+    <hr>
+    <p><strong>SUSFaruma — Projeto Integrador Front-End</strong></p>
+    <p>Desenvolvido com foco em acessibilidade e HTML5 Semântico puro.</p>
+    <p>
+      <small>
+        Este site é um protótipo acadêmico para fins de estudo de estrutura web e não substitui os canais oficiais do Ministério da Saúde.<br>
+        Contato: <a href="mailto:camillav704@gmail.com">camillav704@gmail.com</a>
+      </small>
+    </p>
+  </footer>
+
+</body>
+</html>
