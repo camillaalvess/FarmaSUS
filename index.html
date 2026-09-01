@@ -7,11 +7,14 @@
   
   <!-- Metadados Open Graph (Compartilhamento em redes sociais/WhatsApp) -->
   <meta property="og:title" content="FarmaSUS — Mapeamento Colaborativo de Medicamentos no SUS">
-  <meta property="og:description" content="Consulte e reporte a disponibilidade de medicamentos nas UBS da sua região em tempo real.">
+  <meta property="og:description" content="Consulte e reporte a disponibilidade de medicamentos nas UBS da sua região in tempo real.">
   <meta property="og:image" content="img.jpg">
   <meta property="og:type" content="website">
 
   <link rel="stylesheet" href="style.css">
+
+  <!-- NOVO: Link para o script JavaScript (com 'defer' para carregar após o HTML) -->
+  <script src="script.js" defer></script>
 </head>
 <body>
 
@@ -45,7 +48,8 @@
       <h2 id="titulo-busca">Buscar Disponibilidade de Medicamento</h2>
       <p>Informe o nome do medicamento ou o princípio ativo e selecione seu bairro para localizar o posto mais próximo.</p>
 
-      <form action="#" method="GET">
+      <!-- MELHORIA: ID adicionado para facilitar acesso via JS -->
+      <form id="form-busca" action="#" method="GET">
         <fieldset>
           <legend>Parâmetros de Pesquisa</legend>
 
@@ -70,13 +74,25 @@
 
           <div class="form-group">
             <label for="regiao">Selecione seu Bairro / Região:</label>
-            <select id="regiao" name="regiao" required>
-              <option value="">-- Selecione a região --</option>
-              <option value="centro">Centro</option>
-              <option value="mangabeira">Mangabeira</option>
-              <option value="manaira">Manaíra</option>
-              <option value="bayeux">Bayeux</option>
-            </select>
+            <!-- MELHORIA: Trocado <select> por <input> com <datalist> 
+                 Isso cria um campo de busca/filtro (combobox) para bairros, 
+                 melhorando a UX para listas longas. -->
+            <input 
+              type="text" 
+              id="regiao" 
+              name="regiao" 
+              placeholder="Digite para filtrar... Ex: Centro" 
+              list="sugestoes-bairros"
+              required
+            >
+            <datalist id="sugestoes-bairros">
+              <option value="Centro">
+              <option value="Mangabeira">
+              <option value="Manaíra">
+              <option value="Bayeux">
+              <option value="Bancários">
+              <option value="Tambiá">
+            </datalist>
           </div>
 
           <div class="checkbox-group">
@@ -92,78 +108,17 @@
       </form>
     </section>
 
-    <!-- SEÇÃO 2: RESULTADOS DA BUSCA (Região Dinâmica ARIA) -->
-    <section id="status" aria-labelledby="titulo-resultados" aria-live="polite">
+    <!-- SEÇÃO 2: RESULTADOS DA BUSCA (Atualizada para JS) -->
+    <section id="status" aria-labelledby="titulo-resultados">
       <h2 id="titulo-resultados">Resultados da Consulta</h2>
+      
+      <!-- MELHORIA: Contêiner vazio onde o JavaScript vai inserir os cards 
+           dinamicamente. O atributo aria-live="polite" garante que usuários 
+           de leitores de tela sejam notificados sobre as mudanças. -->
+      <div id="container-resultados" aria-live="polite">
+        <p class="text-muted text-center">Use o formulário acima para buscar medicamentos.</p>
+      </div>
 
-      <!-- CARD 1: UBS I (Estoque Alto) -->
-      <article class="ubs-card">
-        <div class="ubs-header">
-          <h3>UBS I - Centro de Saúde da Família</h3>
-          <mark class="status-badge status-high">Insulina NPH: Estoque Alto</mark>
-        </div>
-        
-        <div class="ubs-body">
-          <div class="ubs-info">
-            <p><strong>Endereço:</strong> Rua das Flores, 120 — Centro</p>
-            <p><strong>Telefone:</strong> <a href="tel:8332140001">(83) 3214-0001</a></p>
-            <p><strong>Horário:</strong> Segunda a Sexta, das 07:00 às 16:00</p>
-          </div>
-
-          <div class="stock-box">
-            <p><strong>Nível de Estoque Estimado:</strong></p>
-            <label for="meter-ubs1">Capacidade em Estoque (80%):</label>
-            <meter id="meter-ubs1" min="0" max="100" low="25" high="75" optimum="100" value="80">80%</meter>
-            <small class="stock-label text-success">Situação Normal</small>
-          </div>
-
-          <details>
-            <summary>Ver postos alternativos em um raio de 3 km</summary>
-            <ul>
-              <li>UBS Policlínica Mandacaru — Estoque Médio</li>
-              <li>UBS IV Tambiá — Estoque Alto</li>
-            </ul>
-          </details>
-        </div>
-
-        <div class="footer-meta">
-          <p>Última confirmação: <time datetime="2026-08-26T16:00">26/08/2026 às 16:00</time> | Relatado por: <em>Maria S. (Usuária verificada)</em></p>
-        </div>
-      </article>
-
-      <!-- CARD 2: UBS II (Estoque Crítico) -->
-      <article class="ubs-card">
-        <div class="ubs-header">
-          <h3>UBS II - Mangabeira Saúde</h3>
-          <mark class="status-badge status-low">Losartana 50mg: Estoque Crítico</mark>
-        </div>
-        
-        <div class="ubs-body">
-          <div class="ubs-info">
-            <p><strong>Endereço:</strong> Av. Josefa Taveira, 450 — Mangabeira</p>
-            <p><strong>Telefone:</strong> <a href="tel:8332140002">(83) 3214-0002</a></p>
-            <p><strong>Horário:</strong> Segunda a Sexta, das 07:00 às 17:00</p>
-          </div>
-
-          <div class="stock-box">
-            <p><strong>Nível de Estoque Estimado:</strong></p>
-            <label for="meter-ubs2">Capacidade em Estoque (15%):</label>
-            <meter id="meter-ubs2" min="0" max="100" low="25" high="75" optimum="100" value="15">15%</meter>
-            <small class="stock-label text-danger">Atenção: Risco de Desabastecimento</small>
-          </div>
-
-          <details>
-            <summary>Ver postos alternativos em um raio de 3 km</summary>
-            <ul>
-              <li>UBS III Bancários — Estoque Alto</li>
-            </ul>
-          </details>
-        </div>
-
-        <div class="footer-meta">
-          <p>Última confirmação: <time datetime="2026-08-26T14:30">26/08/2026 às 14:30</time> | Relatado por: <em>João P. (Usuário verificado)</em></p>
-        </div>
-      </article>
     </section>
 
     <!-- SEÇÃO 3: REPORTAR DISPONIBILIDADE -->
@@ -229,7 +184,8 @@
     <address>
       <p><strong>FarmaSUS</strong> — Projeto Integrador Acadêmico (HTML5 Semântico & Acessibilidade)</p>
       <p>Desenvolvido por <strong>Camilla Vitória</strong> | Aluna de ADS (UNIPÊ)</p>
-      <p>Contato: <a href="mailto:contato@farmasus.org.br">contato@farmasus.org.br</a></p>
+      <p>Contato: <a href="mailto:camillav704@gmail.com">camillav704@gmail.com</a></p>
+      <p>João Pessoa — PB</p>
     </address>
   </footer>
 

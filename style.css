@@ -303,6 +303,19 @@ button[type="reset"]:hover {
 .ubs-body {
   padding: 1.25rem;
   background-color: var(--surface);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Novo: Estilos para o link de telefone (Garantindo Contraste) */
+.ubs-info a[href^="tel:"] {
+  color: var(--primary-dark); /* Azul mais escuro para melhor contraste */
+  font-weight: 600;
+  text-decoration: underline;
+}
+.ubs-info a[href^="tel:"]:hover {
+  color: var(--primary);
 }
 
 .stock-box {
@@ -321,6 +334,41 @@ meter {
 
 .text-success { color: #065f46; font-weight: 600; }
 .text-danger { color: #991b1b; font-weight: 600; }
+
+/* Feedback Visual no Card Inteiro 
+   Adiciona uma borda lateral grossa e um fundo sutil 
+*/
+.ubs-card.card-high {
+  border-left: 6px solid var(--status-high-bg);
+  background-color: #ecfdf5; /* Fundo verde bem sutil */
+}
+
+.ubs-card.card-medium {
+  border-left: 6px solid var(--status-medium-bg);
+  background-color: #fffbeb; /* Fundo amarelo bem sutil */
+}
+
+.ubs-card.card-low {
+  border-left: 6px solid var(--status-low-bg);
+  background-color: #fef2f2; /* Fundo vermelho bem sutil */
+}
+
+/* Novo: Botão de Reportar dentro do Card */
+.btn-report-card {
+  background-color: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  align-self: flex-start; /* Não ocupa a largura toda */
+  margin-top: 0.5rem;
+}
+
+.btn-report-card:hover {
+  background-color: var(--border-color);
+  color: var(--text-main);
+  transform: none; /* Remove animação de levantar */
+}
 
 details {
   background-color: #f9fafb;
