@@ -7,13 +7,13 @@
   
   <!-- Metadados Open Graph (Compartilhamento em redes sociais/WhatsApp) -->
   <meta property="og:title" content="FarmaSUS — Mapeamento Colaborativo de Medicamentos no SUS">
-  <meta property="og:description" content="Consulte e reporte a disponibilidade de medicamentos nas UBS da sua região in tempo real.">
+  <meta property="og:description" content="Consulte e reporte a disponibilidade de medicamentos nas UBS da sua região em tempo real.">
   <meta property="og:image" content="img.jpg">
   <meta property="og:type" content="website">
 
   <link rel="stylesheet" href="style.css">
 
-  <!-- NOVO: Link para o script JavaScript (com 'defer' para carregar após o HTML) -->
+  <!-- Link para o script JavaScript -->
   <script src="script.js" defer></script>
 </head>
 <body>
@@ -31,10 +31,10 @@
     <!-- Navegação Principal -->
     <nav aria-label="Navegação Principal do FarmaSUS">
       <ul>
+        <li><a href="#video">Conheça o SUS</a></li>
         <li><a href="#consultar">Consultar Medicamento</a></li>
         <li><a href="#status">Status por Unidade</a></li>
         <li><a href="#reportar">Reportar Disponibilidade</a></li>
-        <li><a href="#transparencia">Relatório de Transparência</a></li>
         <li><a href="#faq">Perguntas Frequentes</a></li>
       </ul>
     </nav>
@@ -43,12 +43,28 @@
   <!-- CONTEÚDO PRINCIPAL DA APLICAÇÃO -->
   <main>
 
+    <!-- SEÇÃO DE VÍDEO EXPLICATIVO -->
+    <section id="video" aria-labelledby="titulo-video">
+      <h2 id="titulo-video">Como Funciona o SUS: Guia Rápido</h2>
+      <p>Entenda como funciona o Sistema Único de Saúde, suas diretrizes e os níveis de atendimento oferecidos à população:</p>
+      
+      <div class="video-container">
+        <iframe 
+          src="https://www.youtube.com/embed/YJaEz2qBveY?si=UnEtnPVnPdVTtnmN" 
+          title="SUS - Princípios e Diretrizes do Sistema Único de Saúde" 
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          referrerpolicy="strict-origin-when-cross-origin" 
+          allowfullscreen>
+        </iframe>
+      </div>
+    </section>
+
     <!-- SEÇÃO 1: CONSULTA / BUSCA -->
     <section id="consultar" aria-labelledby="titulo-busca">
       <h2 id="titulo-busca">Buscar Disponibilidade de Medicamento</h2>
       <p>Informe o nome do medicamento ou o princípio ativo e selecione seu bairro para localizar o posto mais próximo.</p>
 
-      <!-- MELHORIA: ID adicionado para facilitar acesso via JS -->
       <form id="form-busca" action="#" method="GET">
         <fieldset>
           <legend>Parâmetros de Pesquisa</legend>
@@ -74,9 +90,6 @@
 
           <div class="form-group">
             <label for="regiao">Selecione seu Bairro / Região:</label>
-            <!-- MELHORIA: Trocado <select> por <input> com <datalist> 
-                 Isso cria um campo de busca/filtro (combobox) para bairros, 
-                 melhorando a UX para listas longas. -->
             <input 
               type="text" 
               id="regiao" 
@@ -108,17 +121,13 @@
       </form>
     </section>
 
-    <!-- SEÇÃO 2: RESULTADOS DA BUSCA (Atualizada para JS) -->
+    <!-- SEÇÃO 2: RESULTADOS DA BUSCA -->
     <section id="status" aria-labelledby="titulo-resultados">
       <h2 id="titulo-resultados">Resultados da Consulta</h2>
       
-      <!-- MELHORIA: Contêiner vazio onde o JavaScript vai inserir os cards 
-           dinamicamente. O atributo aria-live="polite" garante que usuários 
-           de leitores de tela sejam notificados sobre as mudanças. -->
       <div id="container-resultados" aria-live="polite">
         <p class="text-muted text-center">Use o formulário acima para buscar medicamentos.</p>
       </div>
-
     </section>
 
     <!-- SEÇÃO 3: REPORTAR DISPONIBILIDADE -->
