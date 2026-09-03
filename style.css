@@ -2,13 +2,11 @@
    1. DESIGN SYSTEM & VARIÁVEIS MODULARIZADAS
    ========================================================================== */
 :root {
-  /* Cores Institucionais */
   --primary: #0056b3;
   --primary-dark: #003775;
   --bg-main: #f4f6f9;
   --surface: #ffffff;
   
-  /* Cores Semânticas de Estoque/Status */
   --status-high-bg: #065f46;
   --status-high-text: #ecfdf5;
   --status-medium-bg: #92400e;
@@ -16,19 +14,21 @@
   --status-low-bg: #991b1b;
   --status-low-text: #fef2f2;
 
-  /* Tipografia & Neutros */
   --text-main: #1f2937;
   --text-muted: #4b5563;
   --border-color: #e5e7eb;
   --focus-ring: #ffbf00;
 
-  /* Espaçamentos e Raios */
   --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
-  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
-  --transition: all 0.2s ease-in-out;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --shadow-sm: 0 2px 4px rgba(0,0,0,0.08);
+  --shadow-md: 0 8px 16px rgba(0,0,0,0.12);
+  --transition: all 0.25s ease-in-out;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 *, *::before, *::after {
@@ -42,11 +42,10 @@ body {
   line-height: 1.6;
   color: var(--text-main);
   background-color: var(--bg-main);
+  min-height: 100vh;
 }
 
-/* ==========================================================================
-   2. ACESSIBILIDADE DE FOCO (TECLADO / TAB)
-   ========================================================================== */
+/* Acessibilidade de Foco */
 a:focus-visible, 
 button:focus-visible, 
 input:focus-visible, 
@@ -58,141 +57,193 @@ summary:focus-visible {
 }
 
 /* ==========================================================================
-   3. CABEÇALHO (HEADER) COM BANNER HORIZONTAL
+   2. HERO PORTAL / HERO DASHBOARD
    ========================================================================== */
-header {
-  background-color: var(--primary-dark);
+.hero-portal {
+  background: linear-gradient(135deg, #002b5c 0%, #0056b3 100%);
   color: white;
-  padding: 0;
-  box-shadow: var(--shadow-md);
-}
-
-.header-banner {
+  min-height: 75vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
-  width: 100%;
-  max-height: 280px;
-  overflow: hidden;
+  padding: 2.5rem 1rem;
 }
 
-.hero-image {
+.hero-portal .header-overlay {
+  max-width: 1000px;
   width: 100%;
-  height: 280px;
-  object-fit: cover;
-  display: block;
-  opacity: 0.85;
-}
-
-.header-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(180deg, rgba(0, 55, 117, 0.4) 0%, rgba(0, 55, 117, 0.92) 100%);
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  gap: 2rem;
   text-align: center;
-  padding: 1rem;
 }
 
-.header-overlay h1 {
+.user-greeting .greeting-subtitle {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.85;
+  margin-bottom: 0.2rem;
+}
+
+.user-greeting h1 {
   font-size: 2.2rem;
   font-weight: 800;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.6);
 }
 
-.header-overlay p {
-  font-size: 1.1rem;
-  opacity: 0.95;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+.user-greeting p {
+  font-size: 1rem;
+  opacity: 0.9;
 }
 
-/* Menu de Navegação */
-nav {
-  background-color: var(--primary);
-  padding: 0.75rem 1rem;
-}
-
-nav ul {
+/* Grelha de Cards Compactos */
+.action-grid {
   list-style: none;
   display: flex;
   justify-content: center;
+  align-items: stretch;
   flex-wrap: wrap;
-  gap: 1.25rem;
+  gap: 1rem;
+  width: 100%;
 }
 
-nav a {
-  color: white;
+.action-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 125px;
+  height: 115px;
+  padding: 0.85rem 0.5rem;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: var(--radius-md);
   text-decoration: none;
-  font-size: 0.95rem;
-  font-weight: 500;
-  padding: 0.4rem 0.8rem;
-  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
   transition: var(--transition);
 }
 
-nav a:hover {
-  background-color: rgba(255, 255, 255, 0.25);
-  transform: translateY(-1px);
+.card-icon {
+  width: 44px;
+  height: 44px;
+  background-color: #e0f2fe;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+  transition: var(--transition);
+}
+
+.card-icon svg {
+  width: 22px;
+  height: 22px;
+  stroke: var(--primary);
+}
+
+.card-title {
+  color: var(--text-main);
+  font-weight: 700;
+  font-size: 0.78rem;
+  line-height: 1.15;
+}
+
+.action-card:hover {
+  transform: translateY(-5px);
+  background: #ffffff;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+}
+
+.action-card:hover .card-icon {
+  background-color: var(--primary);
+}
+
+.action-card:hover .card-icon svg {
+  stroke: white;
+}
+
+/* Caixa de Login */
+.login-access-box {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--radius-lg);
+  max-width: 500px;
+  width: 100%;
+}
+
+.login-access-box p {
+  font-size: 0.9rem;
+  margin-bottom: 0.85rem;
+}
+
+.btn-login-sus {
+  background-color: #059669;
+  color: white;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border: none;
+  padding: 0.75rem 1.75rem;
+  border-radius: 50px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: var(--transition);
+}
+
+.btn-login-sus:hover {
+  background-color: #047857;
+  transform: scale(1.03);
 }
 
 /* ==========================================================================
-   4. ESTRUTURA E SEÇÕES PRINCIPAIS
+   3. SISTEMA DE EXIBIÇÃO DE SEÇÃO ÚNICA (SPA / ABAS EXCLUSIVAS)
    ========================================================================== */
+body.initial-view main {
+  display: none;
+}
+
 main {
   max-width: 1000px;
   margin: 2.5rem auto;
   padding: 0 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
 }
 
-section {
+/* Esconde todas as seções por padrão */
+main section {
+  display: none;
   background-color: var(--surface);
-  padding: 2rem;
+  padding: 2.25rem;
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-color);
   box-shadow: var(--shadow-sm);
 }
 
+/* Exibe APENAS a seção ativa clicada */
+main section.active-section {
+  display: block;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 h2 {
   color: var(--primary);
-  font-size: 1.35rem;
+  font-size: 1.4rem;
   margin-bottom: 1.25rem;
   border-bottom: 2px solid var(--border-color);
   padding-bottom: 0.5rem;
 }
 
 /* ==========================================================================
-   5. SEÇÃO DE VÍDEO RESPONSIVO (NATIVO & IFRAME)
-   ========================================================================== */
-.video-container {
-  position: relative;
-  width: 100%;
-  padding-bottom: 56.25%; /* Proporção widescreen 16:9 */
-  height: 0;
-  overflow: hidden;
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
-  margin-top: 1rem;
-}
-
-.video-container iframe,
-.video-container video {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
-  object-fit: cover;
-}
-
-/* ==========================================================================
-   6. FORMULÁRIOS, BOTÕES E MICRO-INTERAÇÕES
+   4. FORMULÁRIOS & COMPONENTES DA APLICAÇÃO
    ========================================================================== */
 fieldset {
   border: 1px solid var(--border-color);
@@ -264,7 +315,6 @@ button, input[type="submit"] {
 button:hover, input[type="submit"]:hover {
   background-color: var(--primary-dark);
   transform: translateY(-1px);
-  box-shadow: var(--shadow-sm);
 }
 
 button[type="reset"] {
@@ -276,18 +326,47 @@ button[type="reset"]:hover {
 }
 
 /* ==========================================================================
-   7. CARDS UBS & STATUS SEMÂNTICO DO ESTOQUE
+   5. SEÇÃO DE VÍDEO RESPONSIVO
+   ========================================================================== */
+.video-container {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  margin-top: 1rem;
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.video-fallback {
+  text-align: center;
+  margin-top: 0.75rem;
+  color: var(--text-muted);
+}
+
+.video-fallback a {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   6. CARDS UBS & STATUS
    ========================================================================== */
 .ubs-card {
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   overflow: hidden;
   margin-top: 1.5rem;
-  transition: var(--transition);
-}
-
-.ubs-card:hover {
-  box-shadow: var(--shadow-md);
 }
 
 .ubs-header {
@@ -301,29 +380,16 @@ button[type="reset"]:hover {
   gap: 0.75rem;
 }
 
-/* Badges Coloridas com Alto Contraste */
 .status-badge {
   padding: 0.35rem 0.85rem;
   border-radius: 50px;
   font-size: 0.85rem;
   font-weight: 700;
-  display: inline-block;
 }
 
-.status-high {
-  background-color: var(--status-high-bg);
-  color: var(--status-high-text);
-}
-
-.status-medium {
-  background-color: var(--status-medium-bg);
-  color: var(--status-medium-text);
-}
-
-.status-low {
-  background-color: var(--status-low-bg);
-  color: var(--status-low-text);
-}
+.status-high { background-color: var(--status-high-bg); color: var(--status-high-text); }
+.status-medium { background-color: var(--status-medium-bg); color: var(--status-medium-text); }
+.status-low { background-color: var(--status-low-bg); color: var(--status-low-text); }
 
 .ubs-body {
   padding: 1.25rem;
@@ -333,23 +399,11 @@ button[type="reset"]:hover {
   gap: 1rem;
 }
 
-/* Link de telefone com alto contraste */
-.ubs-info a[href^="tel:"] {
-  color: var(--primary-dark);
-  font-weight: 600;
-  text-decoration: underline;
-}
-
-.ubs-info a[href^="tel:"]:hover {
-  color: var(--primary);
-}
-
 .stock-box {
   background-color: #f9fafb;
   border: 1px solid var(--border-color);
   padding: 1rem;
   border-radius: var(--radius-sm);
-  margin: 1rem 0;
 }
 
 meter {
@@ -358,26 +412,6 @@ meter {
   margin: 0.5rem 0;
 }
 
-.text-success { color: #065f46; font-weight: 600; }
-.text-danger { color: #991b1b; font-weight: 600; }
-
-/* Feedback Visual no Card Inteiro (Borda e Fundo Sutil) */
-.ubs-card.card-high {
-  border-left: 6px solid var(--status-high-bg);
-  background-color: #ecfdf5;
-}
-
-.ubs-card.card-medium {
-  border-left: 6px solid var(--status-medium-bg);
-  background-color: #fffbeb;
-}
-
-.ubs-card.card-low {
-  border-left: 6px solid var(--status-low-bg);
-  background-color: #fef2f2;
-}
-
-/* Botão de Reportar contextualizado no Card */
 .btn-report-card {
   background-color: transparent;
   color: var(--text-muted);
@@ -385,13 +419,6 @@ meter {
   padding: 0.5rem 1rem;
   font-size: 0.85rem;
   align-self: flex-start;
-  margin-top: 0.5rem;
-}
-
-.btn-report-card:hover {
-  background-color: var(--border-color);
-  color: var(--text-main);
-  transform: none;
 }
 
 details {
@@ -417,9 +444,6 @@ summary {
   border-top: 1px solid var(--border-color);
 }
 
-/* ==========================================================================
-   8. RODAPÉ
-   ========================================================================== */
 footer {
   text-align: center;
   padding: 2.5rem 1rem;
@@ -429,5 +453,4 @@ footer {
 
 footer a {
   color: var(--primary);
-  text-decoration: underline;
 }

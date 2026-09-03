@@ -3,64 +3,96 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FarmaSUS — Mapeamento Colaborativo de Medicamentos no SUS</title>
+  <title>FarmaSUS</title>
   
-  <!-- Metadados Open Graph (Compartilhamento em redes sociais/WhatsApp) -->
+  <!-- Metadados Open Graph -->
   <meta property="og:title" content="FarmaSUS — Mapeamento Colaborativo de Medicamentos no SUS">
   <meta property="og:description" content="Consulte e reporte a disponibilidade de medicamentos nas UBS da sua região em tempo real.">
   <meta property="og:image" content="img.jpg">
   <meta property="og:type" content="website">
 
   <link rel="stylesheet" href="style.css">
-
-  <!-- Link para o script JavaScript -->
   <script src="script.js" defer></script>
 </head>
-<body>
+<body class="initial-view">
 
-  <!-- CABEÇALHO PRINCIPAL COM BANNER HORIZONTAL -->
-  <header>
-    <div class="header-banner">
-      <img src="img.jpg" alt="Ilustração sobre o SUS, comunidade e medicamentos" class="hero-image">
-      <div class="header-overlay">
-        <h1>FarmaSUS</h1>
-        <p>Mapeamento Colaborativo de Medicamentos no SUS</p>
+  <!-- CABEÇALHO / HERO DASHBOARD ESTILO PORTAL -->
+  <header class="hero-portal">
+    <div class="header-overlay">
+      
+      <!-- Saudação e Boas-vindas -->
+      <div class="user-greeting">
+        <p class="greeting-subtitle">Mapeamento Colaborativo de Medicamentos no SUS</p>
+        <h1>Olá, Cidadão!</h1>
+        <p>Selecione uma das ações abaixo para navegar nos serviços:</p>
       </div>
-    </div>
 
-    <!-- Navegação Principal -->
-    <nav aria-label="Navegação Principal do FarmaSUS">
-      <ul>
-        <li><a href="#video">Conheça o SUS</a></li>
-        <li><a href="#consultar">Consultar Medicamento</a></li>
-        <li><a href="#status">Status por Unidade</a></li>
-        <li><a href="#reportar">Reportar Disponibilidade</a></li>
-        <li><a href="#faq">Perguntas Frequentes</a></li>
-      </ul>
-    </nav>
+      <!-- PAINEL DE CARDS DE AÇÃO -->
+      <nav aria-label="Ações do FarmaSUS">
+        <ul class="action-grid">
+          <li>
+            <a href="#consultar" class="action-card" onclick="mostrarConteudo('consultar')">
+              <span class="card-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              </span>
+              <span class="card-title">Consultar Medicamento</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="#status" class="action-card" onclick="mostrarConteudo('status')">
+              <span class="card-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"/><path d="M5 21V7l8-4 6 4v14"/><path d="M9 10h4"/><path d="M11 8v4"/></svg>
+              </span>
+              <span class="card-title">Status por Unidade</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="#reportar" class="action-card" onclick="mostrarConteudo('reportar')">
+              <span class="card-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"/></svg>
+              </span>
+              <span class="card-title">Reportar Estoque</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="#video" class="action-card" onclick="mostrarConteudo('video')">
+              <span class="card-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.934a.5.5 0 0 0-.777-.416L16 11"/><rect width="14" height="12" x="2" y="6" rx="2"/></svg>
+              </span>
+              <span class="card-title">Conheça o SUS</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="#faq" class="action-card" onclick="mostrarConteudo('faq')">
+              <span class="card-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M12 7v2"/><path d="M12 13h.01"/></svg>
+              </span>
+              <span class="card-title">Perguntas Frequentes</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- ÁREA DE LOGIN / ACESSO DO CIDADÃO -->
+      <div class="login-access-box">
+        <p>Acesse com a sua conta Google para reportar colaborativamente:</p>
+        <button type="button" class="btn-login-sus" onclick="simularLogin()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Entrar no FarmaSUS
+        </button>
+      </div>
+
+    </div>
   </header>
 
   <!-- CONTEÚDO PRINCIPAL DA APLICAÇÃO -->
-  <main>
+  <main id="main-content">
 
-    <!-- SEÇÃO DE VÍDEO EXPLICATIVO -->
-    <section id="video" aria-labelledby="titulo-video">
-      <h2 id="titulo-video">Como Funciona o SUS: Guia Rápido</h2>
-      <p>Entenda como funciona o Sistema Único de Saúde, suas diretrizes e os níveis de atendimento oferecidos à população:</p>
-      
-      <div class="video-container">
-        <iframe 
-          src="https://www.youtube.com/embed/YJaEz2qBveY?si=UnEtnPVnPdVTtnmN" 
-          title="SUS - Princípios e Diretrizes do Sistema Único de Saúde" 
-          frameborder="0" 
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-          referrerpolicy="strict-origin-when-cross-origin" 
-          allowfullscreen>
-        </iframe>
-      </div>
-    </section>
-
-    <!-- SEÇÃO 1: CONSULTA / BUSCA -->
+    <!-- SEÇÃO 1: CONSULTA DE MEDICAMENTOS -->
     <section id="consultar" aria-labelledby="titulo-busca">
       <h2 id="titulo-busca">Buscar Disponibilidade de Medicamento</h2>
       <p>Informe o nome do medicamento ou o princípio ativo e selecione seu bairro para localizar o posto mais próximo.</p>
@@ -171,6 +203,26 @@
       </form>
     </section>
 
+    <!-- SEÇÃO VÍDEO EXPLICATIVO -->
+    <section id="video" aria-labelledby="titulo-video">
+      <h2 id="titulo-video">Como Funciona o SUS: Guia Rápido</h2>
+      <p>Entenda como funciona o Sistema Único de Saúde, suas diretrizes e os níveis de atendimento oferecidos à população:</p>
+      
+      <div class="video-container">
+        <iframe 
+          src="https://www.youtube.com/embed/YJaEz2qBveY?si=UnEtnPVnPdVTtnmN" 
+          title="SUS - Princípios e Diretrizes do Sistema Único de Saúde" 
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          referrerpolicy="strict-origin-when-cross-origin" 
+          allowfullscreen>
+        </iframe>
+      </div>
+      <p class="video-fallback">
+        <small>Não consegue visualizar o vídeo no player acima? <a href="https://www.youtube.com/watch?v=YJaEz2qBveY" target="_blank" rel="noopener noreferrer">Assista diretamente no YouTube</a>.</small>
+      </p>
+    </section>
+
     <!-- SEÇÃO 4: PERGUNTAS FREQUENTES (FAQ) -->
     <section id="faq" aria-labelledby="titulo-faq">
       <h2 id="titulo-faq">Perguntas Frequentes (FAQ)</h2>
@@ -191,10 +243,9 @@
   <!-- RODAPÉ ACADÊMICO -->
   <footer>
     <address>
-      <p><strong>FarmaSUS</strong> — Projeto Integrador Acadêmico (HTML5 Semântico & Acessibilidade)</p>
-      <p>Desenvolvido por <strong>Camilla Vitória</strong> | Aluna de ADS (UNIPÊ)</p>
+      <p><strong>FarmaSUS</strong> — Projeto Integrador Acadêmico (em andamento)</p>
+      <p>Desenvolvido por <strong>Camilla Vitória</strong></p>
       <p>Contato: <a href="mailto:camillav704@gmail.com">camillav704@gmail.com</a></p>
-      <p>João Pessoa — PB</p>
     </address>
   </footer>
 
