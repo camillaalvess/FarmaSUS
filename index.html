@@ -6,7 +6,7 @@
   <title>FarmaSUS</title>
   
   <!-- Metadados Open Graph -->
-  <meta property="og:title" content="FarmaSUS — Mapeamento Colaborativo de Medicamentos no SUS">
+  <meta property="og:title" content="FarmaSUS">
   <meta property="og:description" content="Consulte e reporte a disponibilidade de medicamentos nas UBS da sua região em tempo real.">
   <meta property="og:image" content="img.jpg">
   <meta property="og:type" content="website">
@@ -20,9 +20,62 @@
   <header class="hero-portal">
     <div class="header-overlay">
       
-      <!-- Saudação e Boas-vindas -->
+      <!-- LOGOTIPO SVG -->
+      <div class="brand-container">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 240" width="360" height="120" class="main-logo-svg" role="img" aria-labelledby="svgTitleFarmaSUS svgDescFarmaSUS">
+          <title id="svgTitleFarmaSUS">Logotipo FarmaSUS - Farmácia Pública do SUS</title>
+          <desc id="svgDescFarmaSUS">Símbolo vetorial para FarmaSUS combinando cruz da saúde, folha verde, cápsula de medicamento e tipografia acessível.</desc>
+
+          <defs>
+            <linearGradient id="susBlueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#0056A3" />
+              <stop offset="100%" stop-color="#002A52" />
+            </linearGradient>
+
+            <linearGradient id="susGreenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#00E676" />
+              <stop offset="100%" stop-color="#00A859" />
+            </linearGradient>
+
+            <linearGradient id="susCyanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#00D4FF" />
+              <stop offset="100%" stop-color="#00A3E0" />
+            </linearGradient>
+
+            <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+              <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000000" flood-opacity="0.3" />
+            </filter>
+          </defs>
+
+          <!-- Placa de Fundo Branca -->
+          <rect x="5" y="5" width="710" height="230" rx="30" fill="#FFFFFF" opacity="0.95" filter="url(#softShadow)" />
+
+          <!-- Ícone do Logotipo -->
+          <g transform="translate(30, 0)">
+            <circle cx="120" cy="120" r="95" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2" />
+            <path d="M 100 45 C 100 39, 105 34, 111 34 L 129 34 C 135 34, 140 39, 140 45 L 140 100 L 195 100 C 201 100, 206 105, 206 111 L 206 129 C 206 135, 201 140, 195 140 L 140 140 L 140 195 C 140 201, 135 206, 129 206 L 111 206 C 105 206, 100 201, 100 195 L 100 140 L 45 140 C 39 140, 34 135, 34 129 L 34 111 C 34 105, 39 100, 45 100 L 100 100 Z" fill="url(#susBlueGrad)" />
+
+            <g transform="translate(85, 85)">
+              <path d="M 10 35 C 10 20, 22 8, 37 8 L 37 62 C 22 62, 10 50, 10 35 Z" fill="url(#susCyanGrad)" opacity="0.95" />
+              <path d="M 37 8 L 50 8 C 65 8, 77 20, 77 35 C 77 50, 65 62, 50 62 L 37 62 Z" fill="#FFFFFF" opacity="0.95" />
+            </g>
+
+            <path d="M 120 120 C 120 70, 180 60, 195 65 C 195 80, 185 140, 120 120 Z" fill="url(#susGreenGrad)" />
+            <path d="M 120 120 C 145 105, 170 85, 190 70" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" opacity="0.85" />
+            <path d="M 50 160 C 80 205, 160 205, 190 165 C 175 185, 100 190, 65 155 Z" fill="url(#susCyanGrad)" />
+          </g>
+
+          <!-- Tipografia -->
+          <g font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif">
+            <text x="260" y="125" font-size="64" font-weight="800" fill="#003366" letter-spacing="-0.5">Farma<tspan font-weight="900" fill="#00A859" letter-spacing="1">SUS</tspan></text>
+            <rect x="262" y="142" width="415" height="5" rx="2.5" fill="url(#susGreenGrad)" />
+            <text x="262" y="172" font-size="14" font-weight="700" fill="#334155" letter-spacing="3">FARMÁCIA PÚBLICA DO BRASIL</text>
+          </g>
+        </svg>
+      </div>
+
+      <!-- Saudação -->
       <div class="user-greeting">
-        <p class="greeting-subtitle">Mapeamento Colaborativo de Medicamentos no SUS</p>
         <h1>Olá, Cidadão!</h1>
         <p>Selecione uma das ações abaixo para navegar nos serviços:</p>
       </div>
@@ -31,7 +84,7 @@
       <nav aria-label="Ações do FarmaSUS">
         <ul class="action-grid">
           <li>
-            <a href="#consultar" class="action-card" onclick="mostrarConteudo('consultar')">
+            <a href="javascript:void(0)" class="action-card" onclick="mostrarConteudo('consultar')">
               <span class="card-icon" aria-hidden="true">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
               </span>
@@ -40,7 +93,7 @@
           </li>
 
           <li>
-            <a href="#status" class="action-card" onclick="mostrarConteudo('status')">
+            <a href="javascript:void(0)" class="action-card" onclick="mostrarConteudo('status')">
               <span class="card-icon" aria-hidden="true">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"/><path d="M5 21V7l8-4 6 4v14"/><path d="M9 10h4"/><path d="M11 8v4"/></svg>
               </span>
@@ -49,7 +102,7 @@
           </li>
 
           <li>
-            <a href="#reportar" class="action-card" onclick="mostrarConteudo('reportar')">
+            <a href="javascript:void(0)" class="action-card" onclick="mostrarConteudo('reportar')">
               <span class="card-icon" aria-hidden="true">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"/></svg>
               </span>
@@ -58,7 +111,7 @@
           </li>
 
           <li>
-            <a href="#video" class="action-card" onclick="mostrarConteudo('video')">
+            <a href="javascript:void(0)" class="action-card" onclick="mostrarConteudo('video')">
               <span class="card-icon" aria-hidden="true">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.934a.5.5 0 0 0-.777-.416L16 11"/><rect width="14" height="12" x="2" y="6" rx="2"/></svg>
               </span>
@@ -67,7 +120,7 @@
           </li>
 
           <li>
-            <a href="#faq" class="action-card" onclick="mostrarConteudo('faq')">
+            <a href="javascript:void(0)" class="action-card" onclick="mostrarConteudo('faq')">
               <span class="card-icon" aria-hidden="true">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M12 7v2"/><path d="M12 13h.01"/></svg>
               </span>
@@ -77,7 +130,7 @@
         </ul>
       </nav>
 
-      <!-- ÁREA DE LOGIN / ACESSO DO CIDADÃO -->
+      <!-- ÁREA DE LOGIN -->
       <div class="login-access-box">
         <p>Acesse com a sua conta Google para reportar colaborativamente:</p>
         <button type="button" class="btn-login-sus" onclick="simularLogin()">
@@ -93,7 +146,7 @@
   <main id="main-content">
 
     <!-- SEÇÃO 1: CONSULTA DE MEDICAMENTOS -->
-    <section id="consultar" aria-labelledby="titulo-busca">
+    <section id="consultar" class="content-section" aria-labelledby="titulo-busca">
       <h2 id="titulo-busca">Buscar Disponibilidade de Medicamento</h2>
       <p>Informe o nome do medicamento ou o princípio ativo e selecione seu bairro para localizar o posto mais próximo.</p>
 
@@ -154,7 +207,7 @@
     </section>
 
     <!-- SEÇÃO 2: RESULTADOS DA BUSCA -->
-    <section id="status" aria-labelledby="titulo-resultados">
+    <section id="status" class="content-section" aria-labelledby="titulo-resultados">
       <h2 id="titulo-resultados">Resultados da Consulta</h2>
       
       <div id="container-resultados" aria-live="polite">
@@ -163,7 +216,7 @@
     </section>
 
     <!-- SEÇÃO 3: REPORTAR DISPONIBILIDADE -->
-    <section id="reportar" aria-labelledby="titulo-reportar">
+    <section id="reportar" class="content-section" aria-labelledby="titulo-reportar">
       <h2 id="titulo-reportar">Reportar Disponibilidade</h2>
       <p>Esteve em uma unidade de saúde recentemente? Colabore com a comunidade informando a situação do estoque.</p>
 
@@ -204,7 +257,7 @@
     </section>
 
     <!-- SEÇÃO VÍDEO EXPLICATIVO -->
-    <section id="video" aria-labelledby="titulo-video">
+    <section id="video" class="content-section" aria-labelledby="titulo-video">
       <h2 id="titulo-video">Como Funciona o SUS: Guia Rápido</h2>
       <p>Entenda como funciona o Sistema Único de Saúde, suas diretrizes e os níveis de atendimento oferecidos à população:</p>
       
@@ -224,7 +277,7 @@
     </section>
 
     <!-- SEÇÃO 4: PERGUNTAS FREQUENTES (FAQ) -->
-    <section id="faq" aria-labelledby="titulo-faq">
+    <section id="faq" class="content-section" aria-labelledby="titulo-faq">
       <h2 id="titulo-faq">Perguntas Frequentes (FAQ)</h2>
 
       <details>
