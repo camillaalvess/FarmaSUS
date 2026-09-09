@@ -1,6 +1,6 @@
 /* ==========================================================================
    FarmaSUS — script.js
-   Navegação SPA (Seção Única Exclusiva), Busca, Geociência e Interações
+   Navegação SPA (Seção Única Exclusiva), Busca, Geolocalização e Interações
    ========================================================================== */
 
 // --- 1. FUNÇÃO DE EXIBIÇÃO EXCLUSIVA DA SEÇÃO CLICADA ---
@@ -94,7 +94,7 @@ if (formBusca) {
 
         setTimeout(() => {
             const resultados = ubsMock.filter(ubs => {
-                const correspondeBairro = ubs.bairro.toLowerCase().includes(termoRegiao);
+                const correspondeBairro = termoRegiao === '' || ubs.bairro.toLowerCase().includes(termoRegiao);
                 const possuiMedicamento = Object.keys(ubs.estoque).some(medNome => 
                     medNome.toLowerCase().includes(termoMedicamento)
                 );
@@ -118,8 +118,11 @@ function renderizarCards(listaUbs, medicamentoProcurado) {
     const termoMedLower = medicamentoProcurado.toLowerCase();
 
     listaUbs.forEach(ubs => {
-        const medNomeReal = Object.keys(ubs.estoque).find(med => med.toLowerCase().includes(termoMedLower)) || medicamentoProcurado;
-        const dadosEstoque = ubs.estoque[medNomeReal] || { nivel: 50, status: "medio", label: "Estoque Informado" };
+        // Encontra a chave exata do medicamento no estoque via comparação case-insensitive
+        const medChaveExata = Object.keys(ubs.estoque).find(med => med.toLowerCase().includes(termoMedLower));
+        
+        const medNomeReal = medChaveExata || medicamentoProcurado;
+        const dadosEstoque = medChaveExata ? ubs.estoque[medChaveExata] : { nivel: 50, status: "medio", label: "Estoque Informado" };
 
         const classMap = {
             alto: { card: 'card-high', badge: 'status-high', text: 'text-success' },
@@ -148,7 +151,7 @@ function renderizarCards(listaUbs, medicamentoProcurado) {
                         <meter id="meter-ubs${ubs.id}" min="0" max="100" low="25" high="75" optimum="100" value="${dadosEstoque.nivel}">${dadosEstoque.nivel}%</meter>
                     </div>
 
-                    <button type="button" class="btn-report-card" onclick="preencherReporte('${ubs.nome}', '${medNomeReal}')">
+                    <button type="button" class="btn-report-card" onclick="preencherReporte('${ubs.nome.replace(/'/g, "\\'")}', '${medNomeReal.replace(/'/g, "\\'")}')">
                         Vi algo diferente? Clique para reportar.
                     </button>
                 </div>
