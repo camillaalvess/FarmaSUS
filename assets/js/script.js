@@ -1,15 +1,31 @@
 /* ==========================================================================
    FarmaSUS — script.js
-   Navegação SPA, Integração com API Node.js/Supabase, Busca e Geolocalização
    ========================================================================== */
 
-// Endereço base da API Node.js/Express
 const API_URL = 'http://localhost:3000/api';
+const SUPABASE_URL = 'https://vyenaqkugitpjfmughqw.supabase.co'; 
 
-// --- 1. FUNÇÃO DE EXIBIÇÃO EXCLUSIVA DA SEÇÃO CLICADA ---
+// Pilha de histórico de navegação interna
+let historicoNavegacao = [];
+let secaoAtual = null;
 
-function mostrarConteudo(idSecao) {
-    document.body.classList.remove('initial-view');
+// --- 1. FUNÇÃO DE EXIBIÇÃO E NAVEGAÇÃO ENTRE SEÇÕES ---
+
+function mostrarConteudo(idSecao, registrarHistorico = true) {
+    const usuarioLogado = localStorage.getItem('usuarioFarmaSUS');
+
+    if (!usuarioLogado) {
+        document.body.classList.add('not-logged-in');
+        idSecao = 'login';
+    } else {
+        document.body.classList.remove('not-logged-in');
+    }
+
+    if (registrarHistorico && secaoAtual && secaoAtual !== idSecao && secaoAtual !== 'login') {
+        historicoNavegacao.push(secaoAtual);
+    }
+
+    secaoAtual = idSecao;
 
     const todasSecoes = document.querySelectorAll('main section');
     todasSecoes.forEach(sec => sec.classList.remove('active-section'));
@@ -18,20 +34,81 @@ function mostrarConteudo(idSecao) {
     if (secaoAlvo) {
         secaoAlvo.classList.add('active-section');
         
-        setTimeout(() => {
-            secaoAlvo.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 50);
+        if (idSecao !== 'login') {
+            const elementoTopo = secaoAlvo.getBoundingClientRect().top + window.pageYOffset - 10;
+            window.scrollTo({ top: elementoTopo, behavior: 'smooth' });
+        } else {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
     }
 }
 
-// --- 2. SIMULAÇÃO DE LOGIN ---
+// --- 2. VOLTAR PARA A ABA ANTERIOR ---
 
-function simularLogin() {
-    alert("Redirecionando para a autenticação do Cidadão SUS...");
-    mostrarConteudo('consultar');
+function voltarParaAnterior() {
+    if (historicoNavegacao.length > 0) {
+        const secaoAnterior = historicoNavegacao.pop();
+        mostrarConteudo(secaoAnterior, false);
+    } else {
+        const todasSecoes = document.querySelectorAll('main section');
+        todasSecoes.forEach(sec => sec.classList.remove('active-section'));
+        secaoAtual = null;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 }
 
-// --- 3. LÓGICA DE BUSCA INTEGRADAS À API REAL ---
+// --- 3. MOSTRAR / OCULTAR SENHA ---
+
+function togglePassword(inputId, btnElement) {
+    const input = document.getElementById(inputId);
+    if (input.type === 'password') {
+        input.type = 'text';
+        btnElement.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>`;
+    } else {
+        input.type = 'password';
+        btnElement.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+    }
+}
+
+// --- 4. ALTERNÂNCIA DE MODO (LOGIN x CADASTRO) ---
+
+function alternarModoAuth(modo) {
+    const formLogin = document.getElementById('form-login');
+    const formCadastro = document.getElementById('form-cadastrar');
+    const overlayLeft = document.getElementById('overlay-left');
+    const overlayRight = document.getElementById('overlay-right');
+
+    if (modo === 'cadastro') {
+        if (formLogin) formLogin.style.display = 'none';
+        if (formCadastro) formCadastro.style.display = 'flex';
+        if (overlayLeft) overlayLeft.style.display = 'none';
+        if (overlayRight) overlayRight.style.display = 'block';
+    } else {
+        if (formLogin) formLogin.style.display = 'flex';
+        if (formCadastro) formCadastro.style.display = 'none';
+        if (overlayLeft) overlayLeft.style.display = 'block';
+        if (overlayRight) overlayRight.style.display = 'none';
+    }
+}
+
+// --- 5. AUTENTICAÇÃO SOCIAL OFICIAL GOOGLE OAUTH ---
+
+function loginSocial(provedor) {
+    const redirectUrl = window.location.origin;
+    window.location.href = `${SUPABASE_URL}/auth/v1/authorize?provider=${provedor}&redirect_to=${encodeURIComponent(redirectUrl)}`;
+}
+
+// --- 6. LOGOUT ---
+
+function realizarLogout() {
+    localStorage.removeItem('usuarioFarmaSUS');
+    localStorage.removeItem('tokenFarmaSUS');
+    historicoNavegacao = [];
+    alert('Sessão encerrada com sucesso.');
+    window.location.reload();
+}
+
+// --- 7. BUSCA DE MEDICAMENTOS ---
 
 const formBusca = document.getElementById('form-busca');
 const inputMedicamento = document.getElementById('medicamento');
@@ -42,13 +119,14 @@ if (formBusca) {
     formBusca.addEventListener('submit', async function(event) {
         event.preventDefault();
 
-        const termoMedicamento = inputMedicamento.value.trim();
-        const termoRegiao = inputRegiao.value.trim();
+        const termoMedicamento = inputMedicamento ? inputMedicamento.value.trim() : '';
+        const termoRegiao = inputRegiao ? inputRegiao.value.trim() : '';
 
-        containerResultados.innerHTML = '<p class="text-muted text-center">Buscando dados no servidor...</p>';
+        if (containerResultados) {
+            containerResultados.innerHTML = '<p class="text-muted text-center">Buscando dados no servidor...</p>';
+        }
 
         try {
-            // Chamada Fetch para a rota GET /api/medicamentos do Node.js
             const queryParams = new URLSearchParams({
                 medicamento: termoMedicamento,
                 regiao: termoRegiao
@@ -61,16 +139,21 @@ if (formBusca) {
                 renderizarCards(resultado.dados, termoMedicamento);
                 mostrarConteudo('status');
             } else {
-                containerResultados.innerHTML = `<p class="text-danger text-center">Erro ao buscar dados: ${resultado.mensagem}</p>`;
+                if (containerResultados) {
+                    containerResultados.innerHTML = `<p class="text-danger text-center">Erro ao buscar dados: ${resultado.mensagem}</p>`;
+                }
             }
         } catch (erro) {
             console.error('Erro de conexão com a API:', erro);
-            containerResultados.innerHTML = '<p class="text-danger text-center">Não foi possível conectar ao servidor. Verifique se o backend está executando.</p>';
+            if (containerResultados) {
+                containerResultados.innerHTML = '<p class="text-danger text-center">Não foi possível conectar ao servidor.</p>';
+            }
         }
     });
 }
 
 function renderizarCards(listaUbs, medicamentoProcurado) {
+    if (!containerResultados) return;
     containerResultados.innerHTML = '';
 
     if (!listaUbs || listaUbs.length === 0) {
@@ -82,7 +165,6 @@ function renderizarCards(listaUbs, medicamentoProcurado) {
 
     listaUbs.forEach(ubs => {
         const medChaveExata = Object.keys(ubs.estoque || {}).find(med => med.toLowerCase().includes(termoMedLower));
-        
         const medNomeReal = medChaveExata || medicamentoProcurado || 'Medicamento em Estoque';
         const dadosEstoque = medChaveExata ? ubs.estoque[medChaveExata] : { nivel: 50, status: "medio", label: "Estoque Informado" };
 
@@ -99,20 +181,17 @@ function renderizarCards(listaUbs, medicamentoProcurado) {
                     <h3>${ubs.nome}</h3>
                     <mark class="status-badge ${estilos.badge}">${medNomeReal}: ${dadosEstoque.label}</mark>
                 </div>
-                
                 <div class="ubs-body">
                     <div class="ubs-info">
                         <p><strong>Endereço:</strong> ${ubs.endereco}</p>
                         <p><strong>Telefone:</strong> <a href="tel:${ubs.telefone ? ubs.telefone.replace(/\D/g, '') : ''}">${ubs.telefone || 'Não informado'}</a></p>
                         <p><strong>Horário:</strong> ${ubs.horario}</p>
                     </div>
-
                     <div class="stock-box">
                         <p><strong>Nível de Estoque Estimado:</strong></p>
                         <label for="meter-ubs${ubs.id}">Capacidade em Estoque (${dadosEstoque.nivel}%):</label>
                         <meter id="meter-ubs${ubs.id}" min="0" max="100" low="25" high="75" optimum="100" value="${dadosEstoque.nivel}">${dadosEstoque.nivel}%</meter>
                     </div>
-
                     <button type="button" class="btn-report-card" onclick="preencherReporte('${ubs.nome.replace(/'/g, "\\'")}', '${medNomeReal.replace(/'/g, "\\'")}')">
                         Vi algo diferente? Clique para reportar.
                     </button>
@@ -124,7 +203,7 @@ function renderizarCards(listaUbs, medicamentoProcurado) {
     });
 }
 
-// --- 4. FORMULÁRIO DE REPORTE INTEGRADO À API (POST /api/reportar) ---
+// --- 8. FORMULÁRIO DE REPORTE ---
 
 const formReportar = document.querySelector('#reportar form');
 
@@ -132,7 +211,6 @@ if (formReportar) {
     formReportar.addEventListener('submit', async function(event) {
         event.preventDefault();
 
-        // Mapeamento dos campos dos inputs do formulário
         const campoUbs = document.getElementById('rep-ubs');
         const campoMed = document.getElementById('rep-med');
         const campoStatus = document.getElementById('rep-status');
@@ -147,9 +225,7 @@ if (formReportar) {
         try {
             const resposta = await fetch(`${API_URL}/reportar`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(dadosRelato)
             });
 
@@ -163,7 +239,7 @@ if (formReportar) {
             }
         } catch (erro) {
             console.error('Erro ao registrar relato:', erro);
-            alert('Não foi possível enviar o relato. Verifique a conexão com o servidor.');
+            alert('Não foi possível enviar o relato.');
         }
     });
 }
@@ -179,45 +255,99 @@ function preencherReporte(ubsNome, medNome) {
     if (inputStatus) inputStatus.focus();
 }
 
-// --- 5. GEOLOCALIZAÇÃO INTEGRADAS COM DADOS DA API ---
+// --- 9. AUTENTICAÇÃO VIA E-MAIL ---
 
-async function tentarAutocompletarRegiao() {
-    if ("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition(async function(position) {
-            const userLat = position.coords.latitude;
-            const userLon = position.coords.longitude;
+const formLogin = document.getElementById('form-login');
+const formCadastrar = document.getElementById('form-cadastrar');
 
-            try {
-                // Busca as UBSs cadastradas diretamente do backend
-                const resposta = await fetch(`${API_URL}/medicamentos`);
-                const resultado = await resposta.json();
+if (formLogin) {
+    formLogin.addEventListener('submit', async function(event) {
+        event.preventDefault();
+        
+        const emailInput = document.getElementById('login-email');
+        const senhaInput = document.getElementById('login-senha');
 
-                if (resultado.sucesso && resultado.dados.length > 0) {
-                    let ubsMaisProxima = null;
-                    let menorDistancia = Infinity;
+        const email = emailInput ? emailInput.value.trim() : '';
+        const password = senhaInput ? senhaInput.value : '';
 
-                    resultado.dados.forEach(ubs => {
-                        if (ubs.coordenadas) {
-                            const dist = Math.sqrt(
-                                Math.pow(ubs.coordenadas.lat - userLat, 2) + 
-                                Math.pow(ubs.coordenadas.lon - userLon, 2)
-                            );
-                            if (dist < menorDistancia) {
-                                menorDistancia = dist;
-                                ubsMaisProxima = ubs;
-                            }
-                        }
-                    });
+        try {
+            const resposta = await fetch(`${API_URL}/auth/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
 
-                    if (ubsMaisProxima && menorDistancia < 0.5 && inputRegiao) {
-                        inputRegiao.value = ubsMaisProxima.bairro;
-                    }
-                }
-            } catch (erro) {
-                console.warn('Não foi possível obter dados das UBSs para geolocalização:', erro);
+            const resultado = await resposta.json();
+
+            if (resultado.sucesso) {
+                localStorage.setItem('usuarioFarmaSUS', JSON.stringify(resultado.usuario));
+                localStorage.setItem('tokenFarmaSUS', resultado.token);
+                
+                document.body.classList.remove('not-logged-in');
+                mostrarConteudo('consultar', false);
+            } else {
+                alert(`Erro ao entrar: ${resultado.mensagem}`);
             }
-        });
-    }
+        } catch (erro) {
+            console.error('Erro no login:', erro);
+            alert('Não foi possível conectar ao servidor de autenticação.');
+        }
+    });
 }
 
-window.addEventListener('load', tentarAutocompletarRegiao);
+if (formCadastrar) {
+    formCadastrar.addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const nomeInput = document.getElementById('cad-nome');
+        const emailInput = document.getElementById('cad-email');
+        const senhaInput = document.getElementById('cad-senha');
+
+        const nome = nomeInput ? nomeInput.value.trim() : '';
+        const email = emailInput ? emailInput.value.trim() : '';
+        const password = senhaInput ? senhaInput.value : '';
+
+        try {
+            const resposta = await fetch(`${API_URL}/auth/cadastrar`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nome, email, password })
+            });
+
+            const resultado = await resposta.json();
+
+            if (resultado.sucesso) {
+                alert('Cadastro realizado com sucesso! Faça login para continuar.');
+                formCadastrar.reset();
+                alternarModoAuth('login');
+            } else {
+                alert(`Atenção no cadastro: ${resultado.mensagem}`);
+            }
+        } catch (erro) {
+            console.error('Erro no cadastro:', erro);
+            alert('Não foi possível conectar ao servidor.');
+        }
+    });
+}
+
+// --- 10. VERIFICAÇÃO INICIAL E ABERTURA AUTOMÁTICA DA ABA DE CONSULTA ---
+
+document.addEventListener('DOMContentLoaded', () => {
+    const hashParams = new URLSearchParams(window.location.hash.substring(1));
+    const accessToken = hashParams.get('access_token');
+
+    if (accessToken) {
+        localStorage.setItem('tokenFarmaSUS', accessToken);
+        localStorage.setItem('usuarioFarmaSUS', JSON.stringify({ id: 'social_user', email: 'cidadao@farmasus.gov.br' }));
+        window.location.hash = '';
+    }
+
+    const usuarioLogado = localStorage.getItem('usuarioFarmaSUS');
+
+    if (!usuarioLogado) {
+        mostrarConteudo('login', false);
+    } else {
+        document.body.classList.remove('not-logged-in');
+        mostrarConteudo('consultar', false);
+    }
+});

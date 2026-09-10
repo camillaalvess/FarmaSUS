@@ -3,22 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FarmaSUS</title>
+  <title>FarmaSUS — Portal de Acesso</title>
   
-  <!-- Metadados Open Graph (Caminho atualizado para a pasta de imagens) -->
   <meta property="og:title" content="FarmaSUS">
   <meta property="og:description" content="Consulte e reporte a disponibilidade de medicamentos nas UBS da sua região em tempo real.">
   <meta property="og:image" content="assets/images/img.jpg">
   <meta property="og:type" content="website">
 
-  <!-- Estilos e Scripts (Caminhos atualizados para as pastas css e js) -->
   <link rel="stylesheet" href="assets/css/style.css">
   <script src="assets/js/script.js" defer></script>
 </head>
-<body class="initial-view">
+<body class="initial-view not-logged-in">
 
   <!-- CABEÇALHO / HERO DASHBOARD ESTILO PORTAL -->
-  <header class="hero-portal">
+  <header class="hero-portal" id="portal-header">
     <div class="header-overlay">
       
       <!-- LOGOTIPO SVG -->
@@ -48,10 +46,8 @@
             </filter>
           </defs>
 
-          <!-- Placa de Fundo Branca -->
           <rect x="5" y="5" width="710" height="230" rx="30" fill="#FFFFFF" opacity="0.95" filter="url(#softShadow)" />
 
-          <!-- Ícone do Logotipo -->
           <g transform="translate(30, 0)">
             <circle cx="120" cy="120" r="95" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2" />
             <path d="M 100 45 C 100 39, 105 34, 111 34 L 129 34 C 135 34, 140 39, 140 45 L 140 100 L 195 100 C 201 100, 206 105, 206 111 L 206 129 C 206 135, 201 140, 195 140 L 140 140 L 140 195 C 140 201, 135 206, 129 206 L 111 206 C 105 206, 100 201, 100 195 L 100 140 L 45 140 C 39 140, 34 135, 34 129 L 34 111 C 34 105, 39 100, 45 100 L 100 100 Z" fill="url(#susBlueGrad)" />
@@ -66,7 +62,6 @@
             <path d="M 50 160 C 80 205, 160 205, 190 165 C 175 185, 100 190, 65 155 Z" fill="url(#susCyanGrad)" />
           </g>
 
-          <!-- Tipografia -->
           <g font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif">
             <text x="260" y="125" font-size="64" font-weight="800" fill="#003366" letter-spacing="-0.5">Farma<tspan font-weight="900" fill="#00A859" letter-spacing="1">SUS</tspan></text>
             <rect x="262" y="142" width="415" height="5" rx="2.5" fill="url(#susGreenGrad)" />
@@ -75,7 +70,6 @@
         </svg>
       </div>
 
-      <!-- Saudação -->
       <div class="user-greeting">
         <h1>Olá, Cidadão!</h1>
         <p>Selecione uma das ações abaixo para navegar nos serviços:</p>
@@ -112,6 +106,15 @@
           </li>
 
           <li>
+            <a href="javascript:void(0)" class="action-card" onclick="realizarLogout()">
+              <span class="card-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              </span>
+              <span class="card-title">Sair da Conta</span>
+            </a>
+          </li>
+
+          <li>
             <a href="javascript:void(0)" class="action-card" onclick="mostrarConteudo('video')">
               <span class="card-icon" aria-hidden="true">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.934a.5.5 0 0 0-.777-.416L16 11"/><rect width="14" height="12" x="2" y="6" rx="2"/></svg>
@@ -130,24 +133,102 @@
           </li>
         </ul>
       </nav>
-
-      <!-- ÁREA DE LOGIN -->
-      <div class="login-access-box">
-        <p>Acesse com a sua conta Google para reportar colaborativamente:</p>
-        <button type="button" class="btn-login-sus" onclick="simularLogin()">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          Entrar no FarmaSUS
-        </button>
-      </div>
-
     </div>
   </header>
 
   <!-- CONTEÚDO PRINCIPAL DA APLICAÇÃO -->
   <main id="main-content">
 
+    <!-- SEÇÃO DE AUTENTICAÇÃO ISOLADA -->
+    <section id="login" class="content-section active-section" aria-labelledby="titulo-login">
+      <div class="standalone-login-header">
+        <h1>Farma<span>SUS</span></h1>
+        <p>Acesse o portal da farmácia pública do Brasil</p>
+      </div>
+
+      <div class="auth-wrapper" id="auth-wrapper">
+        
+        <!-- COLUNA ESQUERDA: OVERLAY -->
+        <div class="auth-overlay-panel">
+          <div class="overlay-content" id="overlay-left">
+            <h2>Ainda não tem conta?</h2>
+            <p>Crie sua conta em poucos segundos para colaborar com a comunidade e consultar estoques.</p>
+            <button type="button" class="btn-outline-white" onclick="alternarModoAuth('cadastro')">Cadastre-se</button>
+          </div>
+          
+          <div class="overlay-content" id="overlay-right" style="display: none;">
+            <h2>Bem-vindo de volta!</h2>
+            <p>Para continuar conectado e acessar os serviços do FarmaSUS, faça login com seus dados.</p>
+            <button type="button" class="btn-outline-white" onclick="alternarModoAuth('login')">Entrar na Conta</button>
+          </div>
+        </div>
+
+        <!-- COLUNA DIREITA: FORMULÁRIOS -->
+        <div class="auth-form-panel">
+          
+          <!-- FORMULÁRIO DE LOGIN -->
+          <form id="form-login" class="auth-form-box" action="#" method="POST">
+            <h2>Acesse sua Conta</h2>
+            
+            <div class="social-login-icons">
+              <button type="button" class="btn-icon-social" onclick="loginSocial('google')" title="Entrar com o Google">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C12.955 4 4 12.955 4 24s8.955 20 20 20s20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"/><path fill="#FF3D00" d="m6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C16.318 4 9.656 8.337 6.306 14.691z"/><path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238A11.91 11.91 0 0 1 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"/><path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 0 1-4.087 5.571l.003-.002l6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"/></svg>
+              </button>
+            </div>
+
+            <span class="auth-subtitle">ou use seu e-mail cadastrado</span>
+
+            <div class="form-group-modern">
+              <input type="email" id="login-email" required placeholder="E-mail">
+            </div>
+            <div class="form-group-modern password-container">
+              <input type="password" id="login-senha" required placeholder="Senha">
+              <button type="button" class="btn-toggle-password" onclick="togglePassword('login-senha', this)" title="Mostrar/Ocultar Senha">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+              </button>
+            </div>
+
+            <button type="submit" class="btn-submit-modern">Entrar</button>
+          </form>
+
+          <!-- FORMULÁRIO DE CADASTRO -->
+          <form id="form-cadastrar" class="auth-form-box" action="#" method="POST" style="display: none;">
+            <h2>Criar Nova Conta</h2>
+            
+            <div class="social-login-icons">
+              <button type="button" class="btn-icon-social" onclick="loginSocial('google')" title="Cadastrar com o Google">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C12.955 4 4 12.955 4 24s8.955 20 20 20s20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"/><path fill="#FF3D00" d="m6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C16.318 4 9.656 8.337 6.306 14.691z"/><path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238A11.91 11.91 0 0 1 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"/><path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 0 1-4.087 5.571l.003-.002l6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"/></svg>
+              </button>
+            </div>
+
+            <span class="auth-subtitle">ou registre-se com seu e-mail</span>
+
+            <div class="form-group-modern">
+              <input type="text" id="cad-nome" required placeholder="Nome Completo">
+            </div>
+            <div class="form-group-modern">
+              <input type="email" id="cad-email" required placeholder="E-mail">
+            </div>
+            <div class="form-group-modern password-container">
+              <input type="password" id="cad-senha" required minlength="6" placeholder="Senha">
+              <button type="button" class="btn-toggle-password" onclick="togglePassword('cad-senha', this)" title="Mostrar/Ocultar Senha">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+              </button>
+            </div>
+
+            <button type="submit" class="btn-submit-modern btn-green">Cadastrar</button>
+          </form>
+
+        </div>
+      </div>
+    </section>
+
     <!-- SEÇÃO 1: CONSULTA DE MEDICAMENTOS -->
     <section id="consultar" class="content-section" aria-labelledby="titulo-busca">
+      <button class="btn-back" onclick="voltarParaAnterior()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Voltar
+      </button>
+
       <h2 id="titulo-busca">Buscar Disponibilidade de Medicamento</h2>
       <p>Informe o nome do medicamento ou o princípio ativo e selecione seu bairro para localizar o posto mais próximo.</p>
 
@@ -157,14 +238,7 @@
 
           <div class="form-group">
             <label for="medicamento">Nome do Medicamento ou Princípio Ativo:</label>
-            <input 
-              type="search" 
-              id="medicamento" 
-              name="medicamento" 
-              placeholder="Ex: Insulina NPH, Losartana..." 
-              list="sugestoes-medicamentos"
-              required
-            >
+            <input type="search" id="medicamento" name="medicamento" placeholder="Ex: Insulina NPH, Losartana..." list="sugestoes-medicamentos" required>
             <datalist id="sugestoes-medicamentos">
               <option value="Insulina NPH 100UI/ml">
               <option value="Losartana Potássica 50mg">
@@ -176,14 +250,7 @@
 
           <div class="form-group">
             <label for="regiao">Selecione seu Bairro / Região:</label>
-            <input 
-              type="text" 
-              id="regiao" 
-              name="regiao" 
-              placeholder="Digite para filtrar... Ex: Centro" 
-              list="sugestoes-bairros"
-              required
-            >
+            <input type="text" id="regiao" name="regiao" placeholder="Digite para filtrar... Ex: Centro" list="sugestoes-bairros" required>
             <datalist id="sugestoes-bairros">
               <option value="Centro">
               <option value="Mangabeira">
@@ -209,8 +276,11 @@
 
     <!-- SEÇÃO 2: RESULTADOS DA BUSCA -->
     <section id="status" class="content-section" aria-labelledby="titulo-resultados">
+      <button class="btn-back" onclick="voltarParaAnterior()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Voltar
+      </button>
+
       <h2 id="titulo-resultados">Resultados da Consulta</h2>
-      
       <div id="container-resultados" aria-live="polite">
         <p class="text-muted text-center">Use o formulário acima para buscar medicamentos.</p>
       </div>
@@ -218,6 +288,10 @@
 
     <!-- SEÇÃO 3: REPORTAR DISPONIBILIDADE -->
     <section id="reportar" class="content-section" aria-labelledby="titulo-reportar">
+      <button class="btn-back" onclick="voltarParaAnterior()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Voltar
+      </button>
+
       <h2 id="titulo-reportar">Reportar Disponibilidade</h2>
       <p>Esteve em uma unidade de saúde recentemente? Colabore com a comunidade informando a situação do estoque.</p>
 
@@ -259,26 +333,24 @@
 
     <!-- SEÇÃO VÍDEO EXPLICATIVO -->
     <section id="video" class="content-section" aria-labelledby="titulo-video">
+      <button class="btn-back" onclick="voltarParaAnterior()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Voltar
+      </button>
+
       <h2 id="titulo-video">Como Funciona o SUS: Guia Rápido</h2>
       <p>Entenda como funciona o Sistema Único de Saúde, suas diretrizes e os níveis de atendimento oferecidos à população:</p>
       
       <div class="video-container">
-        <iframe 
-          src="https://www.youtube.com/embed/YJaEz2qBveY?si=UnEtnPVnPdVTtnmN" 
-          title="SUS - Princípios e Diretrizes do Sistema Único de Saúde" 
-          frameborder="0" 
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-          referrerpolicy="strict-origin-when-cross-origin" 
-          allowfullscreen>
-        </iframe>
+        <iframe src="https://www.youtube.com/embed/YJaEz2qBveY?si=UnEtnPVnPdVTtnmN" title="SUS - Princípios e Diretrizes do Sistema Único de Saúde" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
       </div>
-      <p class="video-fallback">
-        <small>Não consegue visualizar o vídeo no player acima? <a href="https://www.youtube.com/watch?v=YJaEz2qBveY" target="_blank" rel="noopener noreferrer">Assista diretamente no YouTube</a>.</small>
-      </p>
     </section>
 
     <!-- SEÇÃO 4: PERGUNTAS FREQUENTES (FAQ) -->
     <section id="faq" class="content-section" aria-labelledby="titulo-faq">
+      <button class="btn-back" onclick="voltarParaAnterior()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Voltar
+      </button>
+
       <h2 id="titulo-faq">Perguntas Frequentes (FAQ)</h2>
 
       <details>
@@ -293,15 +365,6 @@
     </section>
 
   </main>
-
-  <!-- RODAPÉ ACADÊMICO -->
-  <footer>
-    <address>
-      <p><strong>FarmaSUS</strong> — Projeto Integrador Acadêmico (em andamento)</p>
-      <p>Desenvolvido por <strong>Camilla Vitória</strong></p>
-      <p>Contato: <a href="mailto:camillav704@gmail.com">camillav704@gmail.com</a></p>
-    </address>
-  </footer>
 
 </body>
 </html>

@@ -4,19 +4,13 @@ const routes = require('./routes');
 
 const app = express();
 
-// Middlewares globais
+// Libera o acesso para o seu Live Server e requisições do front-end
 app.use(cors());
+
+// Permite que a API receba dados em formato JSON no req.body
 app.use(express.json());
 
-// Registro de Rotas da API
+// Carrega as rotas da aplicação (/api/medicamentos, /api/reportar, /api/auth/...)
 app.use(routes);
-
-// Rota padrão de verificação de saúde da API
-app.get('/', (req, res) => {
-  res.status(200).json({
-    sucesso: true,
-    mensagem: 'API FarmaSUS rodando com sucesso! 💊'
-  });
-});
 
 module.exports = app;
