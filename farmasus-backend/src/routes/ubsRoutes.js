@@ -1,10 +1,10 @@
 const { Router } = require('express');
-const ubsController = require('../controllers/ubsController'); // ou o nome do seu controller
+const ubsController = require('../controllers/ubsController');
 
 const router = Router();
 
-// Escuta a chamada do frontend para buscar medicamentos
-router.get('/medicamentos', ubsController.buscarMedicamentos || ubsController.listar || ubsController.buscar);
-router.get('/ubs', ubsController.listarTodas || ubsController.listar);
+// Endpoint chamado por /api/medicamentos
+router.get('/medicamentos', (req, res) => ubsController.buscarUbs(req, res));
+router.get('/ubs', (req, res) => ubsController.buscarUbs(req, res));
 
 module.exports = router;
