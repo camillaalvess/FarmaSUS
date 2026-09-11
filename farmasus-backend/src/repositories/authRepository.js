@@ -32,6 +32,16 @@ class AuthRepository {
     if (error) throw new Error(error.message);
     return data;
   }
+
+  async atualizarSenhaUsuario(token, newPassword) {
+    const { data, error } = await supabase.auth.updateUser(
+      { password: newPassword },
+      { auth: { accessToken: token } }
+    );
+
+    if (error) throw new Error(error.message);
+    return data;
+  }
 }
 
 module.exports = new AuthRepository();

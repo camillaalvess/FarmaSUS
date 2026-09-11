@@ -162,33 +162,30 @@ if (formNovaSenha) {
         }
 
         if (!token) {
-            alert('Sessão de redefinição inválida ou expirada. Solicite um novo e-mail de recuperação.');
+            alert('Sessão expirada. Por favor, solicite a redefinição de senha novamente.');
             window.location.href = window.location.origin;
             return;
         }
 
         try {
-            const resposta = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                    'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ5ZW5hcWt1Z2l0cGpmbXVnaHF3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzczOTY4MzcsImV4cCI6MjA1Mjk3MjgzN30.8V4X...' // Sua chave anon do Supabase
-                },
-                body: JSON.stringify({ password: newPassword })
+            const resposta = await fetch(`${API_URL}/auth/redefinir-senha`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token, newPassword })
             });
 
-            if (resposta.ok) {
+            const resultado = await resposta.json();
+
+            if (resposta.ok && resultado.sucesso) {
                 alert('Senha atualizada com sucesso! Faça login com a sua nova senha.');
                 localStorage.removeItem('tokenFarmaSUS');
                 window.location.href = window.location.origin;
             } else {
-                const erroData = await resposta.json();
-                alert(`Erro ao atualizar senha: ${erroData.msg || erroData.message || 'Sessão expirada. Tente novamente.'}`);
+                alert(`Erro ao atualizar senha: ${resultado.mensagem || 'Tente novamente.'}`);
             }
         } catch (erro) {
             console.error('Erro ao salvar nova senha:', erro);
-            alert('Não foi possível conectar ao servidor de autenticação.');
+            alert('Não foi possível conectar ao servidor.');
         }
     });
 }
@@ -422,12 +419,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const accessToken = hashParams.get('access_token');
     const type = hashParams.get('type');
 
-    // Se o tipo do link for recuperação de senha
+    // Se for link de redefinição de senha: mantém 'not-logged-in' para ocultar o menu azul
     if (type === 'recovery' && accessToken) {
         localStorage.setItem('tokenFarmaSUS', accessToken);
         window.location.hash = '';
 
-        document.body.classList.remove('not-logged-in');
+        document.body.classList.add('not-logged-in');
+
         const todasSecoes = document.querySelectorAll('main section');
         todasSecoes.forEach(sec => sec.classList.remove('active-section'));
 

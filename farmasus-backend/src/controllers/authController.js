@@ -42,6 +42,19 @@ class AuthController {
       return res.status(400).json({ sucesso: false, mensagem: error.message });
     }
   }
+
+  async redefinirSenha(req, res) {
+    try {
+      const { token, newPassword } = req.body;
+      await authService.atualizarSenhaComToken(token, newPassword);
+      return res.status(200).json({
+        sucesso: true,
+        mensagem: 'Senha atualizada com sucesso!'
+      });
+    } catch (error) {
+      return res.status(400).json({ sucesso: false, mensagem: error.message });
+    }
+  }
 }
 
 module.exports = new AuthController();

@@ -24,6 +24,16 @@ class AuthService {
     }
     return await authRepository.solicitarRedefinicaoSenha(email);
   }
+
+  async atualizarSenhaComToken(token, newPassword) {
+    if (!token || !newPassword) {
+      throw new Error('Token e nova senha são obrigatórios.');
+    }
+    if (newPassword.length < 6) {
+      throw new Error('A nova senha deve ter pelo menos 6 caracteres.');
+    }
+    return await authRepository.atualizarSenhaUsuario(token, newPassword);
+  }
 }
 
 module.exports = new AuthService();
