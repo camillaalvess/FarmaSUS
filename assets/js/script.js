@@ -110,7 +110,7 @@ function realizarLogout() {
     window.location.reload();
 }
 
-// --- 7. RECUPERAÇÃO DE SENHA VIA SUPABASE ---
+// --- 7. SOLICITAÇÃO DE RECUPERAÇÃO DE SENHA VIA BACKEND ---
 
 async function recuperarSenha(event) {
     event.preventDefault();
@@ -134,7 +134,7 @@ async function recuperarSenha(event) {
         const resultado = await resposta.json();
 
         if (resposta.ok && resultado.sucesso) {
-            alert(`Instruções de redefinição enviadas para: ${email}. Verifique sua caixa de entrada!`);
+            alert(`Instruções de redefinição enviadas para: ${email}. Verifique sua caixa de entrada e spam!`);
         } else {
             alert(`Atenção: ${resultado.mensagem || 'Não foi possível solicitar a redefinição.'}`);
         }
@@ -144,7 +144,56 @@ async function recuperarSenha(event) {
     }
 }
 
-// --- 8. BUSCA DE MEDICAMENTOS ---
+// --- 8. ATUALIZAÇÃO DA NOVA SENHA APÓS CLICAR NO LINK DO E-MAIL ---
+
+const formNovaSenha = document.getElementById('form-nova-senha');
+
+if (formNovaSenha) {
+    formNovaSenha.addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const novaSenhaInput = document.getElementById('nova-senha-input');
+        const newPassword = novaSenhaInput ? novaSenhaInput.value : '';
+        const token = localStorage.getItem('tokenFarmaSUS');
+
+        if (!newPassword || newPassword.length < 6) {
+            alert('A nova senha precisa ter no mínimo 6 caracteres.');
+            return;
+        }
+
+        if (!token) {
+            alert('Sessão de redefinição inválida ou expirada. Solicite um novo e-mail de recuperação.');
+            window.location.href = window.location.origin;
+            return;
+        }
+
+        try {
+            const resposta = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                    'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ5ZW5hcWt1Z2l0cGpmbXVnaHF3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzczOTY4MzcsImV4cCI6MjA1Mjk3MjgzN30.8V4X...' // Sua chave anon do Supabase
+                },
+                body: JSON.stringify({ password: newPassword })
+            });
+
+            if (resposta.ok) {
+                alert('Senha atualizada com sucesso! Faça login com a sua nova senha.');
+                localStorage.removeItem('tokenFarmaSUS');
+                window.location.href = window.location.origin;
+            } else {
+                const erroData = await resposta.json();
+                alert(`Erro ao atualizar senha: ${erroData.msg || erroData.message || 'Sessão expirada. Tente novamente.'}`);
+            }
+        } catch (erro) {
+            console.error('Erro ao salvar nova senha:', erro);
+            alert('Não foi possível conectar ao servidor de autenticação.');
+        }
+    });
+}
+
+// --- 9. BUSCA DE MEDICAMENTOS ---
 
 const formBusca = document.getElementById('form-busca');
 const inputMedicamento = document.getElementById('medicamento');
@@ -239,7 +288,7 @@ function renderizarCards(listaUbs, medicamentoProcurado) {
     });
 }
 
-// --- 9. FORMULÁRIO DE REPORTE ---
+// --- 10. FORMULÁRIO DE REPORTE ---
 
 const formReportar = document.querySelector('#reportar form');
 
@@ -291,7 +340,7 @@ function preencherReporte(ubsNome, medNome) {
     if (inputStatus) inputStatus.focus();
 }
 
-// --- 10. AUTENTICAÇÃO VIA E-MAIL ---
+// --- 11. AUTENTICAÇÃO VIA E-MAIL (LOGIN E CADASTRO) ---
 
 const formLogin = document.getElementById('form-login');
 const formCadastrar = document.getElementById('form-cadastrar');
@@ -366,12 +415,31 @@ if (formCadastrar) {
     });
 }
 
-// --- 11. VERIFICAÇÃO INICIAL E ABERTURA AUTOMÁTICA DA ABA DE CONSULTA ---
+// --- 12. VERIFICAÇÃO INICIAL, HASH DE RECOVERY E LOGINS ---
 
 document.addEventListener('DOMContentLoaded', () => {
     const hashParams = new URLSearchParams(window.location.hash.substring(1));
     const accessToken = hashParams.get('access_token');
+    const type = hashParams.get('type');
 
+    // Se o tipo do link for recuperação de senha
+    if (type === 'recovery' && accessToken) {
+        localStorage.setItem('tokenFarmaSUS', accessToken);
+        window.location.hash = '';
+
+        document.body.classList.remove('not-logged-in');
+        const todasSecoes = document.querySelectorAll('main section');
+        todasSecoes.forEach(sec => sec.classList.remove('active-section'));
+
+        const secaoNovaSenha = document.getElementById('nova-senha-section');
+        if (secaoNovaSenha) {
+            secaoNovaSenha.style.display = 'block';
+            secaoNovaSenha.classList.add('active-section');
+        }
+        return;
+    }
+
+    // Fluxo padrão para login social Google OAuth
     if (accessToken) {
         localStorage.setItem('tokenFarmaSUS', accessToken);
         localStorage.setItem('usuarioFarmaSUS', JSON.stringify({ id: 'social_user', email: 'cidadao@farmasus.gov.br' }));

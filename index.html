@@ -228,6 +228,23 @@
       </div>
     </section>
 
+    <!-- SEÇÃO DE CRIAÇÃO DE NOVA SENHA (RECOVERY) -->
+    <section id="nova-senha-section" class="content-section" style="display: none;">
+      <h2>Criar Nova Senha</h2>
+      <p>Digite a sua nova senha abaixo para atualizar o acesso à sua conta.</p>
+
+      <form id="form-nova-senha" class="auth-form-box" style="max-width: 400px; margin: 0 auto;">
+        <div class="form-group-modern password-container" style="width: 100%; margin-bottom: 1.25rem;">
+          <input type="password" id="nova-senha-input" required minlength="6" placeholder="Nova Senha (mínimo 6 caracteres)">
+          <button type="button" class="btn-toggle-password" onclick="togglePassword('nova-senha-input', this)" title="Mostrar/Ocultar Senha">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          </button>
+        </div>
+
+        <button type="submit" class="btn-submit-modern btn-green">Atualizar Senha</button>
+      </form>
+    </section>
+
     <!-- SEÇÃO 1: CONSULTA DE MEDICAMENTOS -->
     <section id="consultar" class="content-section" aria-labelledby="titulo-busca">
       <button class="btn-back" onclick="voltarParaAnterior()">
