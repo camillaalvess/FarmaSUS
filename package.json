@@ -2,7 +2,7 @@
   "name": "farmasus-backend",
   "version": "1.0.0",
   "description": "API RESTful em Node.js/Express para o projeto FarmaSUS",
-  "main": "server.js",
+  "main": "farmasus-backend/server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js"
