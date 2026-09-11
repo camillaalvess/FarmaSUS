@@ -5,8 +5,9 @@ const authRoutes = require('./authRoutes');
 
 const router = Router();
 
-router.use('/api', ubsRoutes);
-router.use('/api', reporteRoutes);
-router.use('/api', authRoutes);
+// As rotas internas já possuem seus prefixos específicos
+router.use('/', ubsRoutes);
+router.use('/', reporteRoutes);
+router.use('/', authRoutes);
 
 module.exports = router;

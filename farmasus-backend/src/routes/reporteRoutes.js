@@ -3,7 +3,7 @@ const reporteController = require('../controllers/reporteController');
 
 const router = Router();
 
-// Endpoint: POST /api/reportar
+// Endpoint chamado pelo script.js: POST /api/reportar
 router.post('/reportar', reporteController.criar);
 
 module.exports = router;
