@@ -3,10 +3,7 @@
   "builds": [
     {
       "src": "farmasus-backend/server.js",
-      "use": "@vercel/node",
-      "config": {
-        "includeFiles": ["farmasus-backend/node_modules/**"]
-      }
+      "use": "@vercel/node"
     },
     {
       "src": "index.html",
@@ -20,7 +17,7 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "farmasus-backend/server.js"
+      "dest": "/farmasus-backend/server.js"
     },
     {
       "src": "/(.*)",
