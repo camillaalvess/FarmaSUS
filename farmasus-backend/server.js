@@ -3,10 +3,10 @@ const app = require('./src/app');
 
 const PORT = process.env.PORT || 3000;
 
-// Executa o app.listen apenas quando estiver rodando localmente
-if (process.env.NODE_ENV !== 'production') {
+// Só inicia o servidor com escuta ativa de porta se for ambiente local
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
   app.listen(PORT, () => {
-    console.log(`🚀 Servidor FarmaSUS executando em: http://localhost:${PORT}`);
+    console.log(`🚀 Servidor executando em: http://localhost:${PORT}`);
   });
 }
 
