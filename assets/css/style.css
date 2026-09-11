@@ -359,6 +359,27 @@ main {
   color: var(--primary-color);
 }
 
+/* --- LINK ESQUECEU A SENHA --- */
+.form-actions-link {
+  width: 100%;
+  text-align: right;
+  margin-top: 2px;
+  margin-bottom: 14px;
+}
+
+.form-actions-link a {
+  color: var(--primary-color);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.form-actions-link a:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
 .btn-submit-modern {
   background: var(--primary-color);
   color: #ffffff;

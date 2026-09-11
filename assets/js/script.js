@@ -110,7 +110,41 @@ function realizarLogout() {
     window.location.reload();
 }
 
-// --- 7. BUSCA DE MEDICAMENTOS ---
+// --- 7. RECUPERAÇÃO DE SENHA VIA SUPABASE ---
+
+async function recuperarSenha(event) {
+    event.preventDefault();
+
+    const emailInput = document.getElementById('login-email');
+    const email = emailInput ? emailInput.value.trim() : '';
+
+    if (!email) {
+        alert('Por favor, digite seu e-mail no campo "E-mail" para receber o link de redefinição de senha.');
+        if (emailInput) emailInput.focus();
+        return;
+    }
+
+    try {
+        const resposta = await fetch(`${API_URL}/auth/recuperar-senha`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+        });
+
+        const resultado = await resposta.json();
+
+        if (resposta.ok && resultado.sucesso) {
+            alert(`Instruções de redefinição enviadas para: ${email}. Verifique sua caixa de entrada!`);
+        } else {
+            alert(`Atenção: ${resultado.mensagem || 'Não foi possível solicitar a redefinição.'}`);
+        }
+    } catch (erro) {
+        console.error('Erro na recuperação de senha:', erro);
+        alert('Erro ao conectar com o serviço de recuperação de senha.');
+    }
+}
+
+// --- 8. BUSCA DE MEDICAMENTOS ---
 
 const formBusca = document.getElementById('form-busca');
 const inputMedicamento = document.getElementById('medicamento');
@@ -205,7 +239,7 @@ function renderizarCards(listaUbs, medicamentoProcurado) {
     });
 }
 
-// --- 8. FORMULÁRIO DE REPORTE ---
+// --- 9. FORMULÁRIO DE REPORTE ---
 
 const formReportar = document.querySelector('#reportar form');
 
@@ -257,7 +291,7 @@ function preencherReporte(ubsNome, medNome) {
     if (inputStatus) inputStatus.focus();
 }
 
-// --- 9. AUTENTICAÇÃO VIA E-MAIL ---
+// --- 10. AUTENTICAÇÃO VIA E-MAIL ---
 
 const formLogin = document.getElementById('form-login');
 const formCadastrar = document.getElementById('form-cadastrar');
@@ -332,7 +366,7 @@ if (formCadastrar) {
     });
 }
 
-// --- 10. VERIFICAÇÃO INICIAL E ABERTURA AUTOMÁTICA DA ABA DE CONSULTA ---
+// --- 11. VERIFICAÇÃO INICIAL E ABERTURA AUTOMÁTICA DA ABA DE CONSULTA ---
 
 document.addEventListener('DOMContentLoaded', () => {
     const hashParams = new URLSearchParams(window.location.hash.substring(1));
