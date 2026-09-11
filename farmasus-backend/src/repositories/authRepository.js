@@ -1,8 +1,8 @@
 const { createClient } = require('@supabase/supabase-js');
-const supabase = require('../config/supabase');
 
 class AuthRepository {
   async cadastrarUsuario(email, password, nome) {
+    const supabase = require('../config/supabase');
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -16,6 +16,7 @@ class AuthRepository {
   }
 
   async realizarLogin(email, password) {
+    const supabase = require('../config/supabase');
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password
@@ -26,6 +27,7 @@ class AuthRepository {
   }
 
   async solicitarRedefinicaoSenha(email) {
+    const supabase = require('../config/supabase');
     const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: 'https://farma-sus.vercel.app'
     });
@@ -34,21 +36,18 @@ class AuthRepository {
     return data;
   }
 
-  async atualizarSenhaUsuario(token, newPassword) {
-    // Cria uma instância temporária autenticada com o Bearer Token do usuário
-    const supabaseClientAutenticado = createClient(
-      process.env.SUPABASE_URL,
-      process.env.SUPABASE_KEY,
-      {
-        global: {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      }
-    );
+  async atualizarSenhaUsuario(token, refreshToken, newPassword) {
+    // Cria um cliente dedicado e estabelece a sessão ativa usando os tokens
+    const client = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
+    
+    const { error: sessionError } = await client.auth.setSession({
+      access_token: token,
+      refresh_token: refreshToken || ''
+    });
 
-    const { data, error } = await supabaseClientAutenticado.auth.updateUser({
+    if (sessionError) throw new Error(`Erro na sessão: ${sessionError.message}`);
+
+    const { data, error } = await client.auth.updateUser({
       password: newPassword
     });
 
