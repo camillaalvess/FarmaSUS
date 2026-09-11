@@ -1,3 +1,4 @@
+const { createClient } = require('@supabase/supabase-js');
 const supabase = require('../config/supabase');
 
 class AuthRepository {
@@ -34,10 +35,22 @@ class AuthRepository {
   }
 
   async atualizarSenhaUsuario(token, newPassword) {
-    const { data, error } = await supabase.auth.updateUser(
-      { password: newPassword },
-      { auth: { accessToken: token } }
+    // Cria uma instância temporária autenticada com o Bearer Token do usuário
+    const supabaseClientAutenticado = createClient(
+      process.env.SUPABASE_URL,
+      process.env.SUPABASE_KEY,
+      {
+        global: {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      }
     );
+
+    const { data, error } = await supabaseClientAutenticado.auth.updateUser({
+      password: newPassword
+    });
 
     if (error) throw new Error(error.message);
     return data;
