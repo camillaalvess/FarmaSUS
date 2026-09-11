@@ -17,7 +17,7 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "farmasus-backend/server.js"
+      "dest": "/farmasus-backend/server.js"
     },
     {
       "src": "/(.*)",
