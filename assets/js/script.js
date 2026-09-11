@@ -2,8 +2,10 @@
    FarmaSUS — script.js
    ========================================================================== */
 
-const API_URL = 'http://localhost:3000/api';
-const SUPABASE_URL = 'https://vyenaqkugitpjfmughqw.supabase.co'; 
+const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:3000/api'
+  : '/api';
+const SUPABASE_URL = 'https://vyenaqkugitpjfmughqw.supabase.co';
 
 // Pilha de histórico de navegação interna
 let historicoNavegacao = [];
