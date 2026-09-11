@@ -23,6 +23,15 @@ class AuthRepository {
     if (error) throw new Error(error.message);
     return data;
   }
+
+  async solicitarRedefinicaoSenha(email) {
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: 'https://farma-sus.vercel.app'
+    });
+
+    if (error) throw new Error(error.message);
+    return data;
+  }
 }
 
 module.exports = new AuthRepository();

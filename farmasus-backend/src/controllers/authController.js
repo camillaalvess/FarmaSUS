@@ -29,6 +29,19 @@ class AuthController {
       return res.status(401).json({ sucesso: false, mensagem: 'Credenciais inválidas: ' + error.message });
     }
   }
+
+  async recuperarSenha(req, res) {
+    try {
+      const { email } = req.body;
+      await authService.solicitarRedefinicao(email);
+      return res.status(200).json({
+        sucesso: true,
+        mensagem: 'Instruções enviadas para o e-mail cadastrado.'
+      });
+    } catch (error) {
+      return res.status(400).json({ sucesso: false, mensagem: error.message });
+    }
+  }
 }
 
 module.exports = new AuthController();

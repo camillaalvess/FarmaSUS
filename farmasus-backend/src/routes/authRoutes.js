@@ -3,7 +3,8 @@ const authController = require('../controllers/authController');
 
 const router = Router();
 
-router.post('/auth/cadastrar', authController.cadastrar);
-router.post('/auth/login', authController.login);
+router.post('/cadastrar', authController.cadastrar);
+router.post('/login', authController.login);
+router.post('/recuperar-senha', authController.recuperarSenha);
 
 module.exports = router;
