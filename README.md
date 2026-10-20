@@ -89,3 +89,11 @@ Aluna do curso de **Análise e Desenvolvimento de Sistemas (ADS)** — **UNIPÊ 
 **(02/09/2026):** Projeto muito bacana e bem organizado! A semântica do HTML5 e a acessibilidade ficaram ótimas, o visual com CSS está limpo e a busca com geolocalização no JavaScript foi uma sacada excelente.
 
 Só deixo como sugestão rápida dar uma olhada na busca do `script.js`, que quebra se o usuário digitar o remédio com letras minúsculas (falta um `.toLowerCase()` na checagem dos cards), atualizar o status aqui no README (já que o CSS e o JS já estão funcionando) e adicionar uma confirmação no envio do formulário de reporte para a página não recarregar. Parabéns pelo trabalho, mandou super bem!
+
+---
+
+## Avaliação em pares
+
+**(20/10/2026)** O projeto esta ótimo! Além de apresentar uma grande relevância social, dada sua utilidade comunitária no acompanhamento da disponibilidade de medicamentos. A estrutura do HTML é sólida e demonstra boa semântica. A estilização em CSS é moderna e faz uso de variáveis CSS, Grid e Flexbox, com breakpoints voltados à responsividade.
+
+Porém existem um ponto de atenção que visualizei, por isso eu o deixo como sugestão de melhoria. Os arquivos style.css e script.js concentram todo o código em um único arquivo cada, ultrapassando 400 linhas e acumulando múltiplas responsabilidades (no JavaScript, por exemplo: autenticação, busca, reporte e navegação). Essa prática não é aconselhável do ponto de vista da manutenção. Sugiro fragmentá-los por funcionalidade, como auth.js, busca.js, reporte.js e ui.js no JavaScript e arquivos por área no CSS, visando maior organização, legibilidade e padronização.
